@@ -30,6 +30,7 @@ export default function Home() {
   const [totalInterest, setTotalInterest] = useState<number>(0);
   const [schedule, setSchedule] = useState<PaymentSchedule[]>([]);
   const [isDark, setIsDark] = useState<boolean>(true);
+  const [repaymentType, setRepaymentType] = useState<string>("equated");
 
   // Load from LocalStorage on Mount
   useEffect(() => {
@@ -37,10 +38,11 @@ export default function Home() {
     const savedData = localStorage.getItem("loan_calculator_data");
     if (savedData) {
       try {
-        const { amount, rate, time } = JSON.parse(savedData);
+        const { amount, rate, time, type } = JSON.parse(savedData);
         if (amount) setLoanAmount(amount);
         if (rate) setInterestRate(rate);
         if (time) setYears(time);
+        if (type) setRepaymentType(type);
       } catch (e) {
         console.error("Failed to parse saved data", e);
       }
@@ -74,65 +76,84 @@ export default function Home() {
 
   // Save to LocalStorage on Change
   useEffect(() => {
-    const data = { amount: loanAmount, rate: interestRate, time: years };
+    const data = { amount: loanAmount, rate: interestRate, time: years, type: repaymentType };
     localStorage.setItem("loan_calculator_data", JSON.stringify(data));
-  }, [loanAmount, interestRate, years]);
+  }, [loanAmount, interestRate, years, repaymentType]);
 
   useEffect(() => {
     calculateLoan();
-  }, [loanAmount, interestRate, years]);
+  }, [loanAmount, interestRate, years, repaymentType]);
 
   const calculateLoan = () => {
     const principal = loanAmount;
     const ratePerMonth = interestRate / 12 / 100;
     const numberOfPayments = years * 12;
 
-    let monthlyInstallment = 0;
-
-    if (interestRate === 0) {
-      monthlyInstallment = principal / numberOfPayments;
-    } else {
-      const numerator = principal * ratePerMonth * Math.pow(1 + ratePerMonth, numberOfPayments);
-      const denominator = Math.pow(1 + ratePerMonth, numberOfPayments) - 1;
-      monthlyInstallment = numerator / denominator;
-    }
-
-    // Set First Month Data
-    const firstInterest = principal * ratePerMonth;
-    const firstCapital = monthlyInstallment - firstInterest;
-
-    setEmi(monthlyInstallment);
-    setFirstMonthInterest(firstInterest);
-    setFirstMonthCapital(firstCapital);
-
-    // Set Totals
-    const totalPay = monthlyInstallment * numberOfPayments;
-    const totalInt = totalPay - principal;
-    setTotalPayment(totalPay);
-    setTotalInterest(totalInt > 0 ? totalInt : 0);
-
-    // Generate Schedule
     const newSchedule: PaymentSchedule[] = [];
     let remainingBalance = principal;
+    let totalPaid = 0;
+    let totalInt = 0;
 
-    for (let i = 1; i <= numberOfPayments; i++) {
-      const interest = remainingBalance * ratePerMonth;
-      const capital = monthlyInstallment - interest;
-      remainingBalance -= capital;
-
-      // Handle floating point precision for last payment
-      if (i === numberOfPayments && Math.abs(remainingBalance) < 1) {
-        remainingBalance = 0;
+    if (repaymentType === "equated") {
+      let monthlyInstallment = 0;
+      if (interestRate === 0) {
+        monthlyInstallment = principal / numberOfPayments;
+      } else {
+        const numerator = principal * ratePerMonth * Math.pow(1 + ratePerMonth, numberOfPayments);
+        const denominator = Math.pow(1 + ratePerMonth, numberOfPayments) - 1;
+        monthlyInstallment = numerator / denominator;
       }
 
-      newSchedule.push({
-        month: i,
-        principalPayment: capital,
-        interestPayment: interest,
-        monthlyInstallment: monthlyInstallment,
-        balance: remainingBalance > 0 ? remainingBalance : 0,
-      });
+      for (let i = 1; i <= numberOfPayments; i++) {
+        const interest = remainingBalance * ratePerMonth;
+        const capital = monthlyInstallment - interest;
+        remainingBalance -= capital;
+
+        if (i === numberOfPayments && Math.abs(remainingBalance) < 1) {
+          remainingBalance = 0;
+        }
+
+        newSchedule.push({
+          month: i,
+          principalPayment: capital,
+          interestPayment: interest,
+          monthlyInstallment: monthlyInstallment,
+          balance: remainingBalance > 0 ? remainingBalance : 0,
+        });
+        totalPaid += monthlyInstallment;
+        totalInt += interest;
+      }
+      setEmi(monthlyInstallment);
+    } else {
+      // Reducing Balance - Equated Principal
+      const equatedPrincipal = principal / numberOfPayments;
+      for (let i = 1; i <= numberOfPayments; i++) {
+        const interest = remainingBalance * ratePerMonth;
+        const installment = equatedPrincipal + interest;
+        remainingBalance -= equatedPrincipal;
+
+        if (i === numberOfPayments && Math.abs(remainingBalance) < 1) {
+          remainingBalance = 0;
+        }
+
+        newSchedule.push({
+          month: i,
+          principalPayment: equatedPrincipal,
+          interestPayment: interest,
+          monthlyInstallment: installment,
+          balance: remainingBalance > 0 ? remainingBalance : 0,
+        });
+        totalPaid += installment;
+        totalInt += interest;
+      }
+      // For reducing balance, show the first month's installment
+      setEmi(newSchedule[0]?.monthlyInstallment || 0);
     }
+
+    setFirstMonthInterest(newSchedule[0]?.interestPayment || 0);
+    setFirstMonthCapital(newSchedule[0]?.principalPayment || 0);
+    setTotalPayment(totalPaid);
+    setTotalInterest(totalInt);
     setSchedule(newSchedule);
   };
 
@@ -155,6 +176,8 @@ export default function Home() {
               firstMonthCapital={firstMonthCapital}
               totalPayment={totalPayment}
               totalInterest={totalInterest}
+              repaymentType={repaymentType}
+              setRepaymentType={setRepaymentType}
             />
           </div>
           <div className="col-12 col-md-6 col-lg-7 col-xl-8">

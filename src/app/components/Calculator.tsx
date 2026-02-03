@@ -15,6 +15,8 @@ interface CalculatorProps {
     firstMonthCapital: number;
     totalPayment: number;
     totalInterest: number;
+    repaymentType: string;
+    setRepaymentType: (val: string) => void;
 }
 
 const Calculator: React.FC<CalculatorProps> = ({
@@ -29,6 +31,8 @@ const Calculator: React.FC<CalculatorProps> = ({
     firstMonthCapital,
     totalPayment,
     totalInterest,
+    repaymentType,
+    setRepaymentType,
 }) => {
     // Constants
     const MIN_AMOUNT = 100000;
@@ -149,9 +153,32 @@ const Calculator: React.FC<CalculatorProps> = ({
                 />
             </div>
 
+            {/* Repayment Type Toggle */}
+            <div className={styles.inputGroup}>
+                <label className={styles.label}>Repayment Type</label>
+                <div className={styles.toggleGroup}>
+                    <button
+                        type="button"
+                        className={`${styles.toggleBtn} ${repaymentType === "equated" ? styles.toggleBtnActive : ""}`}
+                        onClick={() => setRepaymentType("equated")}
+                    >
+                        Equated Balance
+                    </button>
+                    <button
+                        type="button"
+                        className={`${styles.toggleBtn} ${repaymentType === "reducing" ? styles.toggleBtnActive : ""}`}
+                        onClick={() => setRepaymentType("reducing")}
+                    >
+                        Reducing Balance
+                    </button>
+                </div>
+            </div>
+
             {/* Results */}
             <div className={styles.resultSection}>
-                <div className={styles.resultLabel}>Monthly Installment</div>
+                <div className={styles.resultLabel}>
+                    {repaymentType === "equated" ? "Monthly Installment" : "First Month Installment"}
+                </div>
                 <div className={styles.resultValue}>{formatCurrency(emi)}</div>
             </div>
 
