@@ -139,8 +139,8 @@ export default function Home() {
   return (
     <main className={`${styles.container} ${!isDark ? "light" : ""}`}>
       <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
-      <div className="container-fluid">
-        <div className="row justify-content-center align-items-start">
+      <div className="container-fluid px-0 px-md-3">
+        <div className="row g-0 g-md-4 justify-content-center align-items-start">
           <div className="col-12 col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0 d-flex justify-content-center">
             <Calculator
               loanAmount={loanAmount}

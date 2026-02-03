@@ -11,6 +11,16 @@
     flex-direction: column;
 }
 
+@media (max-width: 767px) {
+    .card {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+}
+
 .tableContainer {
     overflow-y: auto;
     border-radius: 12px;

@@ -6,6 +6,13 @@
     background: radial-gradient(circle at top left, var(--surface), var(--background));
 }
 
+@media (max-width: 767px) {
+    .container {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
 .card {
     background: var(--card-background);
     /* Fallback/Dark default */
@@ -20,6 +27,16 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+}
+
+@media (max-width: 767px) {
+    .card {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
 }
 
 .header {
@@ -148,10 +165,20 @@
 }
 
 .resultValue {
-    font-size: 3rem;
+    font-size: clamp(1.8rem, 6vw, 3rem);
     font-weight: 800;
     color: var(--primary);
     text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+    overflow-wrap: break-word;
+    word-break: break-all;
+    /* Fallback for very long numbers */
+}
+
+@media (max-width: 480px) {
+    .resultValue {
+        font-size: 1.5rem;
+        /* Further reduction for very small screens */
+    }
 }
 
 .breakdown {
