@@ -1,0 +1,102 @@
+.card {
+    background: var(--card-background);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 1.5rem;
+    /* Slightly less padding than calculator to save space */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.tableContainer {
+    overflow-y: auto;
+    border-radius: 12px;
+    /* Default for mobile */
+    max-height: 600px;
+    margin-top: 1rem;
+}
+
+/* Custom Scrollbar */
+.tableContainer::-webkit-scrollbar {
+    width: 6px;
+}
+
+.tableContainer::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.tableContainer::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+@media (min-width: 992px) {
+    .tableContainer {
+        /* Desktop view: fit to window height minus padding and headers */
+        max-height: calc(100vh - 10rem);
+    }
+}
+
+/* Table Override Styles */
+.customTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    color: var(--foreground);
+}
+
+.customTable thead th {
+    background: rgba(15, 23, 42, 0.95);
+    /* Nearly opaque dark blue */
+    color: var(--primary);
+    /* Gold text for headers */
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--primary);
+    text-align: right;
+}
+
+.customTable thead th:first-child {
+    text-align: left;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.customTable thead th:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.customTable tbody td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-family: monospace;
+    font-size: 1.05rem;
+    text-align: right;
+    transition: all 0.2s;
+}
+
+.customTable tbody td:first-child {
+    text-align: left;
+    color: var(--foreground);
+    font-weight: 600;
+}
+
+.customTable tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--foreground);
+}
+
+.customTable tbody tr:last-child td {
+    border-bottom: none;
+}
