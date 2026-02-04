@@ -4,12 +4,12 @@ import React from "react";
 import styles from "./Calculator.module.css";
 
 interface CalculatorProps {
-    loanAmount: number;
-    setLoanAmount: (val: number) => void;
-    interestRate: number;
-    setInterestRate: (val: number) => void;
-    years: number;
-    setYears: (val: number) => void;
+    loanAmount: number | null;
+    setLoanAmount: (val: number | null) => void;
+    interestRate: number | null;
+    setInterestRate: (val: number | null) => void;
+    years: number | null;
+    setYears: (val: number | null) => void;
     emi: number;
     firstMonthInterest: number;
     firstMonthCapital: number;
@@ -42,7 +42,8 @@ const Calculator: React.FC<CalculatorProps> = ({
     const MIN_YEARS = 1;
     const MAX_YEARS = 15;
 
-    const formatCurrency = (value: number) => {
+    const formatCurrency = (value: number | null) => {
+        if (value === null) return "0.00";
         return new Intl.NumberFormat("en-LK", {
             style: "currency",
             currency: "LKR",
@@ -51,16 +52,28 @@ const Calculator: React.FC<CalculatorProps> = ({
     };
 
     const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value === "") {
+            setLoanAmount(null);
+            return;
+        }
         const val = Number(e.target.value);
         setLoanAmount(val);
     };
 
     const handleRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value === "") {
+            setInterestRate(null);
+            return;
+        }
         const val = Number(e.target.value);
         setInterestRate(val);
     };
 
     const handleYearsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value === "") {
+            setYears(null);
+            return;
+        }
         const val = Number(e.target.value);
         setYears(val);
     };
@@ -82,7 +95,7 @@ const Calculator: React.FC<CalculatorProps> = ({
                     <span className={styles.currencySymbol}>Rs</span>
                     <input
                         type="number"
-                        value={loanAmount}
+                        value={loanAmount ?? ""}
                         onChange={handleAmountChange}
                         className={`${styles.numberInput} ${styles.numberInputWithSymbol}`}
                         min={MIN_AMOUNT}
@@ -93,7 +106,7 @@ const Calculator: React.FC<CalculatorProps> = ({
                     min={MIN_AMOUNT}
                     max={MAX_AMOUNT}
                     step={100000}
-                    value={loanAmount}
+                    value={loanAmount ?? 0}
                     onChange={handleAmountChange}
                     className={styles.slider}
                 />
@@ -108,7 +121,7 @@ const Calculator: React.FC<CalculatorProps> = ({
                 <div className={styles.inputWrapper}>
                     <input
                         type="number"
-                        value={years}
+                        value={years ?? ""}
                         onChange={handleYearsChange}
                         className={styles.numberInput}
                         min={MIN_YEARS}
@@ -119,7 +132,7 @@ const Calculator: React.FC<CalculatorProps> = ({
                     min={MIN_YEARS}
                     max={MAX_YEARS}
                     step={1}
-                    value={years}
+                    value={years ?? 0}
                     onChange={handleYearsChange}
                     className={styles.slider}
                 />
@@ -134,7 +147,7 @@ const Calculator: React.FC<CalculatorProps> = ({
                 <div className={styles.inputWrapper}>
                     <input
                         type="number"
-                        value={interestRate}
+                        value={interestRate ?? ""}
                         onChange={handleRateChange}
                         className={styles.numberInput}
                         min={MIN_RATE}
@@ -147,7 +160,7 @@ const Calculator: React.FC<CalculatorProps> = ({
                     min={MIN_RATE}
                     max={MAX_RATE}
                     step={0.5}
-                    value={interestRate}
+                    value={interestRate ?? 0}
                     onChange={handleRateChange}
                     className={styles.slider}
                 />
