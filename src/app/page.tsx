@@ -6,6 +6,7 @@ import Calculator from "./components/Calculator";
 
 import BreakdownTable from "./components/BreakdownTable";
 import ThemeToggle from "./components/ThemeToggle";
+import InstallPrompt from "./components/InstallPrompt";
 
 interface PaymentSchedule {
   month: number;
@@ -196,6 +197,7 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <InstallPrompt />
     </main>
   );
 }
