@@ -68,7 +68,7 @@ const Calculator: React.FC<CalculatorProps> = ({
     return (
         <div className={styles.card}>
             <div className={styles.header}>
-                <h2 className={styles.title}>Personal Loan Calculator</h2>
+                <h1 className={styles.title}>Personal Loan Calculator</h1>
                 <p className={styles.subtitle}>Plan your finances with ease</p>
             </div>
 
