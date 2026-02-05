@@ -14,20 +14,31 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Personal Loan Calculator | Best Loan Interest Calculator Sri Lanka",
-  description: "Calculate your monthly loan installments (EMI or Reducing Balance) and see a detailed monthly breakdown with ease. The best personal loan calculator for Sri Lankan banks.",
-  keywords: ["loan calculator", "EMI calculator", "reducing balance calculator", "personal loan Sri Lanka", "bank loan calculator", "installment calculator"],
+  title: "Best Loan Calculator Sri Lanka | Personal, Home Loan & Vehicle Leasing",
+  description: "Advanced loan calculator for Sri Lanka. Calculate Personal Loans, Home Loans, and Vehicle Leasing installments with Equated or Reducing Balance repayment types. Hosted on Vercel.",
+  keywords: [
+    "loan calculator",
+    "sri lanka",
+    "personal loan",
+    "home loan",
+    "vehicle leasing",
+    "repayment type",
+    "reducing balance",
+    "EMI calculator",
+    "vercel",
+    "bank loan calculator sri lanka"
+  ],
   openGraph: {
-    title: "Personal Loan Calculator | Plan Your Finances with Ease",
-    description: "Calculate monthly installments and view detailed payment schedules for personal loans.",
+    title: "Loan Calculator Sri Lanka | Personal & Home Loan Tools",
+    description: "Calculate your monthly installments for Personal Loans, Home Loans, and Vehicle Leasing in Sri Lanka. Support for Equated and Reducing Balance repayment types.",
     type: "website",
     locale: "en_LK",
-    siteName: "Loan Calculator",
+    siteName: "SL Loan Calculator",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Personal Loan Calculator",
-    description: "Calculate monthly installments and view detailed payment schedules for personal loans.",
+    title: "Sri Lanka Loan & Leasing Calculator",
+    description: "Plan your finances with our advanced Loan Calculator. Supports all major Sri Lankan bank interest methods.",
   },
   alternates: {
     canonical: "/",

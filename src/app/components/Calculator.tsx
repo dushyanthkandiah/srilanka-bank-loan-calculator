@@ -81,8 +81,8 @@ const Calculator: React.FC<CalculatorProps> = ({
     return (
         <div className={styles.card}>
             <div className={styles.header}>
-                <h1 className={styles.title}>Personal Loan Calculator</h1>
-                <p className={styles.subtitle}>Plan your finances with ease</p>
+                <h1 className={styles.title}>Sri Lanka Loan Calculator</h1>
+                <p className={styles.subtitle}>Personal Loans • Home Loans • Vehicle Leasing</p>
             </div>
 
             {/* Loan Amount */}
