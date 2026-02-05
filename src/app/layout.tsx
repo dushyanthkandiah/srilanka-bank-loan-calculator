@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
@@ -13,9 +13,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "Best Loan Calculator Sri Lanka | Personal, Home Loan & Vehicle Leasing",
   description: "Advanced loan calculator for Sri Lanka. Calculate Personal Loans, Home Loans, and Vehicle Leasing installments with Equated or Reducing Balance repayment types. Hosted on Vercel.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "SL Loan Calc",
+  },
   keywords: [
     "loan calculator",
     "sri lanka",
