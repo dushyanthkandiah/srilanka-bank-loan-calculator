@@ -34,8 +34,8 @@ const BreakdownTable: React.FC<BreakdownTableProps> = ({ schedule }) => {
                     <thead>
                         <tr>
                             <th scope="col">Months</th>
-                            <th scope="col">Principal Pay</th>
-                            <th scope="col">Interest Pay</th>
+                            <th scope="col">Principal</th>
+                            <th scope="col">Interest</th>
                             <th scope="col">Installment</th>
                             <th scope="col">Balance</th>
                         </tr>

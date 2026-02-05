@@ -17,9 +17,10 @@ interface PaymentSchedule {
 
 export default function Home() {
   // State for inputs
-  const [loanAmount, setLoanAmount] = useState<number>(100000);
-  const [interestRate, setInterestRate] = useState<number>(12);
-  const [years, setYears] = useState<number>(5);
+  // State for inputs
+  const [loanAmount, setLoanAmount] = useState<number | null>(100000);
+  const [interestRate, setInterestRate] = useState<number | null>(12);
+  const [years, setYears] = useState<number | null>(5);
 
   // State for outputs
   const [emi, setEmi] = useState<number>(0);
@@ -85,6 +86,16 @@ export default function Home() {
   }, [loanAmount, interestRate, years, repaymentType]);
 
   const calculateLoan = () => {
+    if (loanAmount === null || interestRate === null || years === null) {
+      setEmi(0);
+      setFirstMonthInterest(0);
+      setFirstMonthCapital(0);
+      setTotalPayment(0);
+      setTotalInterest(0);
+      setSchedule([]);
+      return;
+    }
+
     const principal = loanAmount;
     const ratePerMonth = interestRate / 12 / 100;
     const numberOfPayments = years * 12;
