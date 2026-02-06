@@ -27,6 +27,10 @@ export const metadata: Metadata = {
   title: "Best Loan Calculator Sri Lanka | Personal, Home Loan & Vehicle Leasing",
   description: "Advanced loan calculator for Sri Lanka. Calculate Personal Loans, Home Loans, and Vehicle Leasing installments with Equated or Reducing Balance repayment types. Hosted on Vercel.",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",

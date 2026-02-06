@@ -1,6 +1,6 @@
 {
     "name": "Sri Lanka Loan Calculator",
-    "short_name": "SL Loan Calc",
+    "short_name": "Loan Calculator",
     "description": "Calculate Personal Loans, Home Loans, and Vehicle Leasing installments with Equated or Reducing Balance repayment types.",
     "start_url": "/",
     "display": "standalone",
@@ -8,14 +8,14 @@
     "theme_color": "#ffffff",
     "icons": [
         {
-            "src": "/globe.svg",
+            "src": "/icon.png",
             "sizes": "192x192",
-            "type": "image/svg+xml"
+            "type": "image/png"
         },
         {
-            "src": "/globe.svg",
+            "src": "/icon.png",
             "sizes": "512x512",
-            "type": "image/svg+xml"
+            "type": "image/png"
         }
     ]
 }
