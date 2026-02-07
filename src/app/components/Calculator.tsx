@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import styles from "./Calculator.module.css";
 
 interface CalculatorProps {
@@ -35,6 +35,7 @@ const Calculator: React.FC<CalculatorProps> = ({
     setRepaymentType,
 }) => {
     const timerRef = useRef<NodeJS.Timeout | null>(null);
+    const [periodUnit, setPeriodUnit] = useState<'Year' | 'Month'>('Year');
 
     useEffect(() => {
         return () => {
@@ -83,13 +84,28 @@ const Calculator: React.FC<CalculatorProps> = ({
     };
 
     const handleIncrementYears = () => {
-        setYears(prev => (prev ?? 0) + 1);
+        setYears(prev => {
+            const current = prev ?? 0;
+            if (periodUnit === 'Year') {
+                return current + 1;
+            } else {
+                // Increment by 1 month (1/12 year)
+                return current + (1/12);
+            }
+        });
     };
 
     const handleDecrementYears = () => {
         setYears(prev => {
-            const next = (prev ?? 0) - 1;
-            return next >= MIN_YEARS ? next : MIN_YEARS;
+            const current = prev ?? 0;
+            if (periodUnit === 'Year') {
+                const next = current - 1;
+                return next >= MIN_YEARS ? next : MIN_YEARS;
+            } else {
+                const next = current - (1/12);
+                // Ensure at least 1 month
+                return next >= (1/12) ? next : (1/12);
+            }
         });
     };
 
@@ -153,7 +169,19 @@ const Calculator: React.FC<CalculatorProps> = ({
             return;
         }
         const val = Number(e.target.value);
-        setYears(val);
+        if (periodUnit === 'Year') {
+            setYears(val);
+        } else {
+            setYears(val / 12);
+        }
+    };
+
+    const togglePeriodUnit = (unit: 'Year' | 'Month') => {
+        if (unit === periodUnit) return;
+        setPeriodUnit(unit);
+        if (unit === 'Year') {
+            setYears(prev => prev ? Math.round(prev) : null);
+        }
     };
 
     return (
@@ -207,14 +235,16 @@ const Calculator: React.FC<CalculatorProps> = ({
             {/* Repayment Period */}
             <div className={styles.inputGroup}>
                 <div className={styles.labelRow}>
-                    <label className={styles.label}>Repayment Period (Years)</label>
-                    <span className={styles.valueDisplay}>{years} Years</span>
+                    <label className={styles.label}>Repayment Period ({periodUnit === 'Year' ? 'Years' : 'Months'})</label>
+                    <span className={styles.valueDisplay}>
+                        {periodUnit === 'Year' ? (years ?? 0) : Math.round((years ?? 0) * 12)} {periodUnit}s
+                    </span>
                 </div>
                 <div className={styles.inputRowWithButtons}>
                     <div className={styles.inputWrapper}>
                         <input
                             type="number"
-                            value={years ?? ""}
+                            value={periodUnit === 'Year' ? (years ?? "") : (years ? Math.round(years * 12) : "")}
                             onChange={handleYearsChange}
                             className={styles.numberInput}
                             min={MIN_YEARS}
@@ -227,7 +257,7 @@ const Calculator: React.FC<CalculatorProps> = ({
                             onPointerLeave={stopAdjusting}
                             className={styles.adjustBtn}
                             type="button"
-                            title="Decrease by 1 Year"
+                            title={`Decrease by 1 ${periodUnit}`}
                         >
                             -
                         </button>
@@ -237,11 +267,27 @@ const Calculator: React.FC<CalculatorProps> = ({
                             onPointerLeave={stopAdjusting}
                             className={styles.adjustBtn}
                             type="button"
-                            title="Increase by 1 Year"
+                            title={`Increase by 1 ${periodUnit}`}
                         >
                             +
                         </button>
                     </div>
+                </div>
+                <div className={styles.periodToggleGroup}>
+                    <button
+                        type="button"
+                        className={`${styles.periodToggleBtn} ${periodUnit === 'Year' ? styles.periodToggleBtnActive : ''}`}
+                        onClick={() => togglePeriodUnit('Year')}
+                    >
+                        Year
+                    </button>
+                    <button
+                        type="button"
+                        className={`${styles.periodToggleBtn} ${periodUnit === 'Month' ? styles.periodToggleBtnActive : ''}`}
+                        onClick={() => togglePeriodUnit('Month')}
+                    >
+                        Month
+                    </button>
                 </div>
             </div>
 
