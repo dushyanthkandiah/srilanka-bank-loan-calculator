@@ -31,8 +31,7 @@
 
 @media (max-width: 767px) {
     .card {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
+        padding: 2rem 1.5rem;
         border-radius: 0;
         border-left: none;
         border-right: none;
@@ -79,7 +78,7 @@
     font-size: 1.15rem;
     color: var(--primary);
     font-weight: 600;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(237, 244, 255, 0.178);
     padding: 0.25rem 0.5rem;
     border-radius: 6px;
 }
@@ -116,7 +115,7 @@
 
 .numberInput:focus {
     border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.2);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
 }
 
 .toggleGroup {
@@ -144,9 +143,9 @@
 
 .toggleBtnActive {
     background: var(--primary);
-    color: #1e293b;
+    color: var(--on-primary);
     /* Dark text on gold for better contrast */
-    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
 }
 
 .toggleBtn:hover:not(.toggleBtnActive) {
@@ -158,6 +157,7 @@
 /* Range Slider Styling */
 .slider {
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     height: 6px;
     background: var(--surface-highlight);
@@ -176,7 +176,7 @@
     background: var(--primary);
     cursor: pointer;
     transition: transform 0.1s;
-    box-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
+    box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.5);
 }
 
 .slider::-webkit-slider-thumb:hover {
@@ -184,7 +184,7 @@
 }
 
 .resultSection {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(237, 244, 255, 0.178);
     padding: 1.5rem;
     border-radius: var(--radius);
     text-align: center;
@@ -204,7 +204,7 @@
     font-size: clamp(1.8rem, 6vw, 3rem);
     font-weight: 800;
     color: var(--primary);
-    text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+    text-shadow: 0 0 20px rgba(var(--primary-rgb), 0.3);
     overflow-wrap: break-word;
     word-break: break-all;
     /* Fallback for very long numbers */
@@ -238,4 +238,50 @@
 .breakdownValue {
     color: var(--foreground);
     font-weight: 600;
+}
+
+.inputRowWithButtons {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.inputRowWithButtons .inputWrapper {
+    flex: 1;
+}
+
+.adjustButtons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.adjustBtn {
+    background: var(--surface-highlight);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--foreground);
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.adjustBtn:hover {
+    background: var(--primary);
+    color: var(--on-primary);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+}
+
+.adjustBtn:active {
+    transform: translateY(0);
 }

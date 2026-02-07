@@ -58,6 +58,13 @@ export default function Home() {
       if (!isDarkSaved) {
         document.body.classList.add("light");
       }
+    } else {
+      // Check system preference
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setIsDark(prefersDark);
+      if (!prefersDark) {
+        document.body.classList.add("light");
+      }
     }
   }, []);
 

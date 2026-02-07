@@ -1,22 +1,22 @@
 "use client";
 
-import React from "react";
+import React, { useRef, useEffect } from "react";
 import styles from "./Calculator.module.css";
 
 interface CalculatorProps {
     loanAmount: number | null;
-    setLoanAmount: (val: number | null) => void;
+    setLoanAmount: React.Dispatch<React.SetStateAction<number | null>>;
     interestRate: number | null;
-    setInterestRate: (val: number | null) => void;
+    setInterestRate: React.Dispatch<React.SetStateAction<number | null>>;
     years: number | null;
-    setYears: (val: number | null) => void;
+    setYears: React.Dispatch<React.SetStateAction<number | null>>;
     emi: number;
     firstMonthInterest: number;
     firstMonthCapital: number;
     totalPayment: number;
     totalInterest: number;
     repaymentType: string;
-    setRepaymentType: (val: string) => void;
+    setRepaymentType: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Calculator: React.FC<CalculatorProps> = ({
@@ -34,6 +34,17 @@ const Calculator: React.FC<CalculatorProps> = ({
     repaymentType,
     setRepaymentType,
 }) => {
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+    useEffect(() => {
+        return () => {
+            if (timerRef.current) {
+                clearTimeout(timerRef.current as any);
+                clearInterval(timerRef.current as any);
+            }
+        };
+    }, []);
+
     // Constants
     const MIN_AMOUNT = 100000;
     const MAX_AMOUNT = 10000000;
@@ -58,6 +69,73 @@ const Calculator: React.FC<CalculatorProps> = ({
         }
         const val = Number(e.target.value);
         setLoanAmount(val);
+    };
+
+    const handleIncrementAmount = () => {
+        setLoanAmount(prev => (prev ?? 0) + 100000);
+    };
+
+    const handleDecrementAmount = () => {
+        setLoanAmount(prev => {
+            const next = (prev ?? 0) - 100000;
+            return next >= MIN_AMOUNT ? next : MIN_AMOUNT;
+        });
+    };
+
+    const handleIncrementYears = () => {
+        setYears(prev => (prev ?? 0) + 1);
+    };
+
+    const handleDecrementYears = () => {
+        setYears(prev => {
+            const next = (prev ?? 0) - 1;
+            return next >= MIN_YEARS ? next : MIN_YEARS;
+        });
+    };
+
+    const handleIncrementRate = () => {
+        setInterestRate(prev => (prev ?? 0) + 0.5);
+    };
+
+    const handleDecrementRate = () => {
+        setInterestRate(prev => {
+            const next = (prev ?? 0) - 0.5;
+            return next >= MIN_RATE ? next : MIN_RATE;
+        });
+    };
+
+    const startAdjusting = (type: 'incAmount' | 'decAmount' | 'incYears' | 'decYears' | 'incRate' | 'decRate') => {
+        // Auto-hide keyboard on mobile
+        if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur();
+        }
+
+        let action;
+        switch (type) {
+            case 'incAmount': action = handleIncrementAmount; break;
+            case 'decAmount': action = handleDecrementAmount; break;
+            case 'incYears': action = handleIncrementYears; break;
+            case 'decYears': action = handleDecrementYears; break;
+            case 'incRate': action = handleIncrementRate; break;
+            case 'decRate': action = handleDecrementRate; break;
+        }
+        
+        if (!action) return;
+        action();
+        
+        if (timerRef.current) clearTimeout(timerRef.current as any);
+
+        timerRef.current = setTimeout(() => {
+            timerRef.current = setInterval(action!, 80) as any;
+        }, 500);
+    };
+
+    const stopAdjusting = () => {
+        if (timerRef.current) {
+            clearTimeout(timerRef.current as any);
+            clearInterval(timerRef.current as any);
+            timerRef.current = null;
+        }
     };
 
     const handleRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,25 +169,39 @@ const Calculator: React.FC<CalculatorProps> = ({
                     <label className={styles.label}>Loan Amount (LKR)</label>
                     <span className={styles.valueDisplay}>{formatCurrency(loanAmount)}</span>
                 </div>
-                <div className={styles.inputWrapper}>
-                    <span className={styles.currencySymbol}>Rs</span>
-                    <input
-                        type="number"
-                        value={loanAmount ?? ""}
-                        onChange={handleAmountChange}
-                        className={`${styles.numberInput} ${styles.numberInputWithSymbol}`}
-                        min={MIN_AMOUNT}
-                    />
+                <div className={styles.inputRowWithButtons}>
+                    <div className={styles.inputWrapper}>
+                        <span className={styles.currencySymbol}>Rs</span>
+                        <input
+                            type="number"
+                            value={loanAmount ?? ""}
+                            onChange={handleAmountChange}
+                            className={`${styles.numberInput} ${styles.numberInputWithSymbol}`}
+                        />
+                    </div>
+                    <div className={styles.adjustButtons}>
+                        <button
+                            onPointerDown={(e) => { e.preventDefault(); startAdjusting('decAmount'); }}
+                            onPointerUp={stopAdjusting}
+                            onPointerLeave={stopAdjusting}
+                            className={styles.adjustBtn}
+                            type="button"
+                            title="Decrease by 100,000"
+                        >
+                            -
+                        </button>
+                        <button
+                            onPointerDown={(e) => { e.preventDefault(); startAdjusting('incAmount'); }}
+                            onPointerUp={stopAdjusting}
+                            onPointerLeave={stopAdjusting}
+                            className={styles.adjustBtn}
+                            type="button"
+                            title="Increase by 100,000"
+                        >
+                            +
+                        </button>
+                    </div>
                 </div>
-                <input
-                    type="range"
-                    min={MIN_AMOUNT}
-                    max={MAX_AMOUNT}
-                    step={100000}
-                    value={loanAmount ?? 0}
-                    onChange={handleAmountChange}
-                    className={styles.slider}
-                />
             </div>
 
             {/* Repayment Period */}
@@ -118,24 +210,39 @@ const Calculator: React.FC<CalculatorProps> = ({
                     <label className={styles.label}>Repayment Period (Years)</label>
                     <span className={styles.valueDisplay}>{years} Years</span>
                 </div>
-                <div className={styles.inputWrapper}>
-                    <input
-                        type="number"
-                        value={years ?? ""}
-                        onChange={handleYearsChange}
-                        className={styles.numberInput}
-                        min={MIN_YEARS}
-                    />
+                <div className={styles.inputRowWithButtons}>
+                    <div className={styles.inputWrapper}>
+                        <input
+                            type="number"
+                            value={years ?? ""}
+                            onChange={handleYearsChange}
+                            className={styles.numberInput}
+                            min={MIN_YEARS}
+                        />
+                    </div>
+                    <div className={styles.adjustButtons}>
+                        <button
+                            onPointerDown={(e) => { e.preventDefault(); startAdjusting('decYears'); }}
+                            onPointerUp={stopAdjusting}
+                            onPointerLeave={stopAdjusting}
+                            className={styles.adjustBtn}
+                            type="button"
+                            title="Decrease by 1 Year"
+                        >
+                            -
+                        </button>
+                        <button
+                            onPointerDown={(e) => { e.preventDefault(); startAdjusting('incYears'); }}
+                            onPointerUp={stopAdjusting}
+                            onPointerLeave={stopAdjusting}
+                            className={styles.adjustBtn}
+                            type="button"
+                            title="Increase by 1 Year"
+                        >
+                            +
+                        </button>
+                    </div>
                 </div>
-                <input
-                    type="range"
-                    min={MIN_YEARS}
-                    max={MAX_YEARS}
-                    step={1}
-                    value={years ?? 0}
-                    onChange={handleYearsChange}
-                    className={styles.slider}
-                />
             </div>
 
             {/* Interest Rate */}
@@ -144,26 +251,41 @@ const Calculator: React.FC<CalculatorProps> = ({
                     <label className={styles.label}>Interest Rate (% p.a.)</label>
                     <span className={styles.valueDisplay}>{interestRate}%</span>
                 </div>
-                <div className={styles.inputWrapper}>
-                    <input
-                        type="number"
-                        value={interestRate ?? ""}
-                        onChange={handleRateChange}
-                        className={styles.numberInput}
-                        min={MIN_RATE}
-                        max={MAX_RATE}
-                        step={0.5}
-                    />
+                <div className={styles.inputRowWithButtons}>
+                    <div className={styles.inputWrapper}>
+                        <input
+                            type="number"
+                            value={interestRate ?? ""}
+                            onChange={handleRateChange}
+                            className={styles.numberInput}
+                            min={MIN_RATE}
+                            max={MAX_RATE}
+                            step={0.5}
+                        />
+                    </div>
+                    <div className={styles.adjustButtons}>
+                        <button
+                            onPointerDown={(e) => { e.preventDefault(); startAdjusting('decRate'); }}
+                            onPointerUp={stopAdjusting}
+                            onPointerLeave={stopAdjusting}
+                            className={styles.adjustBtn}
+                            type="button"
+                            title="Decrease by 0.5%"
+                        >
+                            -
+                        </button>
+                        <button
+                            onPointerDown={(e) => { e.preventDefault(); startAdjusting('incRate'); }}
+                            onPointerUp={stopAdjusting}
+                            onPointerLeave={stopAdjusting}
+                            className={styles.adjustBtn}
+                            type="button"
+                            title="Increase by 0.5%"
+                        >
+                            +
+                        </button>
+                    </div>
                 </div>
-                <input
-                    type="range"
-                    min={MIN_RATE}
-                    max={MAX_RATE}
-                    step={0.5}
-                    value={interestRate ?? 0}
-                    onChange={handleRateChange}
-                    className={styles.slider}
-                />
             </div>
 
             {/* Repayment Type Toggle */}

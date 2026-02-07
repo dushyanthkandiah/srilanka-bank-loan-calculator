@@ -61,7 +61,7 @@
 .customTable thead th {
     background: rgba(15, 23, 42, 0.95);
     /* Nearly opaque dark blue */
-    color: var(--primary);
+    color: var(--table-header-text);
     /* Gold text for headers */
     position: sticky;
     top: 0;
