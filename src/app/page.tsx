@@ -33,6 +33,7 @@ export default function Home() {
   const [schedule, setSchedule] = useState<PaymentSchedule[]>([]);
   const [isDark, setIsDark] = useState<boolean>(true);
   const [repaymentType, setRepaymentType] = useState<string>("equated");
+  const [periodUnit, setPeriodUnit] = useState<'Year' | 'Month'>('Year');
 
   // Load from LocalStorage on Mount
   useEffect(() => {
@@ -40,11 +41,12 @@ export default function Home() {
     const savedData = localStorage.getItem("loan_calculator_data");
     if (savedData) {
       try {
-        const { amount, rate, time, type } = JSON.parse(savedData);
+        const { amount, rate, time, type, unit } = JSON.parse(savedData);
         if (amount) setLoanAmount(amount);
         if (rate) setInterestRate(rate);
         if (time) setYears(time);
         if (type) setRepaymentType(type);
+        if (unit && (unit === 'Year' || unit === 'Month')) setPeriodUnit(unit);
       } catch (e) {
         console.error("Failed to parse saved data", e);
       }
@@ -85,9 +87,9 @@ export default function Home() {
 
   // Save to LocalStorage on Change
   useEffect(() => {
-    const data = { amount: loanAmount, rate: interestRate, time: years, type: repaymentType };
+    const data = { amount: loanAmount, rate: interestRate, time: years, type: repaymentType, unit: periodUnit };
     localStorage.setItem("loan_calculator_data", JSON.stringify(data));
-  }, [loanAmount, interestRate, years, repaymentType]);
+  }, [loanAmount, interestRate, years, repaymentType, periodUnit]);
 
   useEffect(() => {
     calculateLoan();
@@ -197,6 +199,8 @@ export default function Home() {
               totalInterest={totalInterest}
               repaymentType={repaymentType}
               setRepaymentType={setRepaymentType}
+              periodUnit={periodUnit}
+              setPeriodUnit={setPeriodUnit}
             />
           </div>
           <div className="col-12 col-md-6 col-lg-7 col-xl-8">

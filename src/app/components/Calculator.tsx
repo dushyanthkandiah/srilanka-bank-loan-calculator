@@ -17,6 +17,8 @@ interface CalculatorProps {
     totalInterest: number;
     repaymentType: string;
     setRepaymentType: React.Dispatch<React.SetStateAction<string>>;
+    periodUnit: 'Year' | 'Month';
+    setPeriodUnit: React.Dispatch<React.SetStateAction<'Year' | 'Month'>>;
 }
 
 const Calculator: React.FC<CalculatorProps> = ({
@@ -33,9 +35,10 @@ const Calculator: React.FC<CalculatorProps> = ({
     totalInterest,
     repaymentType,
     setRepaymentType,
+    periodUnit,
+    setPeriodUnit,
 }) => {
     const timerRef = useRef<NodeJS.Timeout | null>(null);
-    const [periodUnit, setPeriodUnit] = useState<'Year' | 'Month'>('Year');
 
     useEffect(() => {
         return () => {
