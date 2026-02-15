@@ -16,6 +16,12 @@ interface BreakdownTableProps {
 }
 
 const BreakdownTable: React.FC<BreakdownTableProps> = ({ schedule }) => {
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const formatCurrency = (value: number) => {
         return new Intl.NumberFormat("en-LK", {
             style: "decimal",
@@ -41,7 +47,7 @@ const BreakdownTable: React.FC<BreakdownTableProps> = ({ schedule }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {schedule.map((row) => (
+                        {mounted && schedule.map((row) => (
                             <tr key={row.month}>
                                 <td>{row.month}</td>
                                 <td>{formatCurrency(row.principalPayment)}</td>

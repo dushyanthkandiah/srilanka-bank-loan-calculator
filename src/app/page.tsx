@@ -5,7 +5,6 @@ import styles from "./calculator/Calculator.module.css";
 import Calculator from "./calculator/Calculator";
 
 import BreakdownTable from "./calculator/BreakdownTable";
-import InstallPrompt from "./components/InstallPrompt";
 
 interface PaymentSchedule {
   month: number;
@@ -38,32 +37,8 @@ export default function Home() {
     // Handle Share Target
     let sharedDataFound = false;
     if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      const text = params.get('text') || '';
-      const title = params.get('title') || '';
-      const url = params.get('url') || '';
-      
-      const combined = `${title} ${text} ${url}`.trim();
-      if (combined) {
-        const matches = combined.match(/\d+([,.]\d+)?/g);
-        if (matches) {
-          const values = matches.map(m => parseFloat(m.replace(/,/g, '')));
-          const potentialAmount = Math.max(...values);
-          if (potentialAmount > 1000) {
-            setLoanAmount(potentialAmount);
-            const potentialRate = values.find(v => v > 0 && v < 50 && v !== potentialAmount);
-            if (potentialRate) setInterestRate(potentialRate);
-            const potentialYears = values.find(v => v > 0 && v < 40 && v !== potentialAmount && v !== potentialRate);
-            if (potentialYears) setYears(potentialYears);
-            sharedDataFound = true;
-          } else if (values.length > 0) {
-            setLoanAmount(values[0]);
-            sharedDataFound = true;
-          }
-        }
-        // Clear parameters from URL without refreshing
-        window.history.replaceState({}, document.title, window.location.pathname);
-      }
+
+
     }
 
     // Load Calculator Data
@@ -209,7 +184,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <InstallPrompt />
     </main>
   );
 }

@@ -38,9 +38,11 @@ const Calculator: React.FC<CalculatorProps> = ({
     periodUnit,
     setPeriodUnit,
 }) => {
+    const [mounted, setMounted] = useState(false);
     const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     useEffect(() => {
+        setMounted(true);
         return () => {
             if (timerRef.current) {
                 clearTimeout(timerRef.current as any);
@@ -198,7 +200,7 @@ const Calculator: React.FC<CalculatorProps> = ({
             <div className={styles.inputGroup}>
                 <div className={styles.labelRow}>
                     <label className={styles.label}>Loan Amount (LKR)</label>
-                    <span className={styles.valueDisplay}>{formatCurrency(loanAmount)}</span>
+                    <span className={styles.valueDisplay}>{mounted ? formatCurrency(loanAmount) : "..."}</span>
                 </div>
                 <div className={styles.inputRowWithButtons}>
                     <div className={styles.inputWrapper}>
@@ -363,17 +365,17 @@ const Calculator: React.FC<CalculatorProps> = ({
                 <div className={styles.resultLabel}>
                     {repaymentType === "equated" ? "Monthly Installment" : "First Month Installment"}
                 </div>
-                <div className={styles.resultValue}>{formatCurrency(emi)}</div>
+                <div className={styles.resultValue}>{mounted ? formatCurrency(emi) : "..."}</div>
             </div>
 
             <div className={styles.breakdown}>
                 <div className={styles.breakdownItem}>
                     <span className={styles.breakdownLabel}>Total Payment</span>
-                    <span className={styles.breakdownValue}>{formatCurrency(totalPayment)}</span>
+                    <span className={styles.breakdownValue}>{mounted ? formatCurrency(totalPayment) : "..."}</span>
                 </div>
                 <div className={styles.breakdownItem} style={{ textAlign: "right" }}>
                     <span className={styles.breakdownLabel}>Total Interest</span>
-                    <span className={styles.breakdownValue}>{formatCurrency(totalInterest)}</span>
+                    <span className={styles.breakdownValue}>{mounted ? formatCurrency(totalInterest) : "..."}</span>
                 </div>
             </div>
 

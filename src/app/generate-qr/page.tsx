@@ -22,24 +22,31 @@ function QRCodeGeneratorContent() {
 
     useEffect(() => {
         let isMounted = true;
-        
+
         // Dynamic import to avoid SSR issues with qr-code-styling
         import("qr-code-styling").then((QRCodeStyling) => {
             if (!isMounted || !qrRef.current) return;
 
             const Constructor = QRCodeStyling.default || QRCodeStyling;
-            
+
             if (!qrCodeInstance.current) {
                 qrCodeInstance.current = new Constructor({
                     width: 300,
                     height: 300,
                     data: text || "https://lk-loan.vercel.app",
                     dotsOptions: {
-                        color: isDark ? "#ffffff" : "#000000",
-                        type: "rounded"
+                        type: "rounded",
+                        gradient: {
+                            type: "linear",
+                            rotation: 46 * (Math.PI / 180), // 46 degrees in radians
+                            colorStops: [
+                                { offset: 0, color: "#dab3ca" }, // Dark Magenta/Purple
+                                { offset: 1, color: "#bad8c7" }  // Dark Green
+                            ]
+                        }
                     },
                     backgroundOptions: {
-                        color: "transparent",
+                        color: "#1e293b",
                     },
                     imageOptions: {
                         crossOrigin: "anonymous",
@@ -55,7 +62,10 @@ function QRCodeGeneratorContent() {
                 qrCodeInstance.current.update({
                     data: text || "https://lk-loan.vercel.app",
                     dotsOptions: {
-                        color: isDark ? "#ffffff" : "#000000"
+                        color: "#ffffff"
+                    },
+                    backgroundOptions: {
+                        color: "#1e293b"
                     }
                 });
             }
@@ -160,26 +170,26 @@ function QRCodeGeneratorContent() {
                             pointerEvents: 'none'
                         }}
                     />
-                    
+
                     {/* Actual image for user interaction (long-press support) */}
                     {qrImageSrc ? (
-                        <img 
-                            src={qrImageSrc} 
+                        <img
+                            src={qrImageSrc}
                             alt="Generated QR Code"
                             style={{
-                                background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-                                padding: "20px",
+                                padding: "10px",
                                 borderRadius: "12px",
                                 display: "inline-block",
                                 maxWidth: "100%",
-                                height: "auto"
+                                height: "auto",
+                                backgroundColor: "var(--surface-highlight)"
                             }}
                         />
                     ) : (
                         <div style={{
                             width: 300,
                             height: 300,
-                            background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                            background: 'var(--surface-highlight)',
                             borderRadius: "12px"
                         }} />
                     )}
