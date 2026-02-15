@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import styles from "./calculator/Calculator.module.css";
-import Calculator from "./calculator/Calculator";
-
-import BreakdownTable from "./calculator/BreakdownTable";
+import Calculator from "@/components/Calculator";
+import BreakdownTable from "@/components/BreakdownTable";
+import styles from "./page.module.css"; // Assuming there might be some page level styles or I'll check
 
 interface PaymentSchedule {
   month: number;
@@ -155,9 +154,6 @@ export default function Home() {
   return (
     <main className={styles.main}>
       <div className="container py-4">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h1 className="h3 mb-0">Loan Calculator</h1>
-        </div>
         <div className="row g-0 g-md-4 justify-content-center align-items-start">
           <div className="col-12 col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0 d-flex justify-content-center">
             <Calculator

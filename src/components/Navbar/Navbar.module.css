@@ -1,0 +1,16 @@
+.navbar {
+    background-color: var(--surface);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.navbar :global(.navbar-brand) {
+    color: var(--primary) !important;
+}
+
+.navbar :global(.nav-link) {
+    color: var(--text-muted);
+}
+
+.navbar :global(.nav-link.active) {
+    color: var(--primary) !important;
+}

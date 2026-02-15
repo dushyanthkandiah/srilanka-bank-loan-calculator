@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import styles from "./BreakdownTable.module.css";
 
@@ -11,25 +9,17 @@ interface PaymentSchedule {
     balance: number;
 }
 
-interface BreakdownTableProps {
+interface BreakdownTableViewProps {
+    mounted: boolean;
     schedule: PaymentSchedule[];
+    formatCurrency: (value: number) => string;
 }
 
-const BreakdownTable: React.FC<BreakdownTableProps> = ({ schedule }) => {
-    const [mounted, setMounted] = React.useState(false);
-
-    React.useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    const formatCurrency = (value: number) => {
-        return new Intl.NumberFormat("en-LK", {
-            style: "decimal",
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-        }).format(value);
-    };
-
+/**
+ * BreakdownTable View (Template)
+ * Purely presentational component for the loan breakdown table.
+ */
+export default function BreakdownTableView({ mounted, schedule, formatCurrency }: BreakdownTableViewProps) {
     return (
         <div className={`mt-4 mt-lg-0 ${styles.card}`}>
             <h2 className="text-center mb-0" style={{ color: "var(--foreground)", fontSize: "1.75rem", fontWeight: 700 }}>
@@ -61,6 +51,4 @@ const BreakdownTable: React.FC<BreakdownTableProps> = ({ schedule }) => {
             </div>
         </div>
     );
-};
-
-export default BreakdownTable;
+}

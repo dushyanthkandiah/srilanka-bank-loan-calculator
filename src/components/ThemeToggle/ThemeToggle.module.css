@@ -1,4 +1,4 @@
-.toggleButton {
+.toggleBtn {
     background: transparent;
     border: none;
     color: var(--text-muted);
@@ -12,11 +12,11 @@
     transition: all 0.2s ease;
 }
 
-.toggleButton:hover {
+.toggleBtn:hover {
     background: var(--surface-highlight);
     color: var(--primary);
 }
 
-.toggleButton:active {
+.toggleBtn:active {
     transform: scale(0.95);
 }

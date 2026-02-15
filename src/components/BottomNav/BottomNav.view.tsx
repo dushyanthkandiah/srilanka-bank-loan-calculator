@@ -1,22 +1,17 @@
-"use client";
-
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import styles from "./BottomNav.module.css";
 
-export default function BottomNav() {
-    const pathname = usePathname();
+interface BottomNavViewProps {
+    pathname: string;
+    handleTap: (e: React.MouseEvent, href: string) => void;
+}
 
-    const handleTap = (e: React.MouseEvent, href: string) => {
-        if (pathname === href) {
-            e.preventDefault();
-        }
-        if (typeof window !== 'undefined' && navigator.vibrate) {
-            navigator.vibrate(10); // Very short haptic feedback
-        }
-    };
-
+/**
+ * BottomNav View (Template)
+ * Purely presentational component for the bottom navigation bar.
+ */
+export default function BottomNavView({ pathname, handleTap }: BottomNavViewProps) {
     return (
         <div className={`d-md-none fixed-bottom ${styles.bottomNav}`}>
             <div className="d-flex justify-content-center align-items-center h-100 gap-3">

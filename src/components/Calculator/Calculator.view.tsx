@@ -1,193 +1,41 @@
-"use client";
-
-import React, { useRef, useEffect, useState } from "react";
+import React from "react";
 import styles from "./Calculator.module.css";
 
-interface CalculatorProps {
+interface CalculatorViewProps {
     loanAmount: number | null;
-    setLoanAmount: React.Dispatch<React.SetStateAction<number | null>>;
     interestRate: number | null;
-    setInterestRate: React.Dispatch<React.SetStateAction<number | null>>;
     years: number | null;
-    setYears: React.Dispatch<React.SetStateAction<number | null>>;
     emi: number;
-    firstMonthInterest: number;
-    firstMonthCapital: number;
     totalPayment: number;
     totalInterest: number;
     repaymentType: string;
-    setRepaymentType: React.Dispatch<React.SetStateAction<string>>;
+    setRepaymentType: (type: string) => void;
     periodUnit: 'Year' | 'Month';
-    setPeriodUnit: React.Dispatch<React.SetStateAction<'Year' | 'Month'>>;
+    mounted: boolean;
+    formatCurrency: (value: number | null) => string;
+    handleAmountChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleYearsChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    handleRateChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    startAdjusting: (type: string) => void;
+    stopAdjusting: () => void;
+    togglePeriodUnit: (unit: 'Year' | 'Month') => void;
+    MIN_YEARS: number;
+    MAX_RATE: number;
+    MIN_RATE: number;
 }
 
-const Calculator: React.FC<CalculatorProps> = ({
-    loanAmount,
-    setLoanAmount,
-    interestRate,
-    setInterestRate,
-    years,
-    setYears,
-    emi,
-    firstMonthInterest,
-    firstMonthCapital,
-    totalPayment,
-    totalInterest,
-    repaymentType,
-    setRepaymentType,
-    periodUnit,
-    setPeriodUnit,
-}) => {
-    const [mounted, setMounted] = useState(false);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-    useEffect(() => {
-        setMounted(true);
-        return () => {
-            if (timerRef.current) {
-                clearTimeout(timerRef.current as any);
-                clearInterval(timerRef.current as any);
-            }
-        };
-    }, []);
-
-    // Constants
-    const MIN_AMOUNT = 100000;
-    const MAX_AMOUNT = 10000000;
-    const MIN_RATE = 1;
-    const MAX_RATE = 30;
-    const MIN_YEARS = 1;
-    const MAX_YEARS = 15;
-
-    const formatCurrency = (value: number | null) => {
-        if (value === null) return "0.00";
-        return new Intl.NumberFormat("en-LK", {
-            style: "currency",
-            currency: "LKR",
-            minimumFractionDigits: 2,
-        }).format(value);
-    };
-
-    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value === "") {
-            setLoanAmount(null);
-            return;
-        }
-        const val = Number(e.target.value);
-        setLoanAmount(val);
-    };
-
-    const handleIncrementAmount = () => {
-        setLoanAmount(prev => (prev ?? 0) + 100000);
-    };
-
-    const handleDecrementAmount = () => {
-        setLoanAmount(prev => {
-            const next = (prev ?? 0) - 100000;
-            return next >= MIN_AMOUNT ? next : MIN_AMOUNT;
-        });
-    };
-
-    const handleIncrementYears = () => {
-        setYears(prev => {
-            const current = prev ?? 0;
-            if (periodUnit === 'Year') {
-                return current + 1;
-            } else {
-                // Increment by 1 month (1/12 year)
-                return current + (1/12);
-            }
-        });
-    };
-
-    const handleDecrementYears = () => {
-        setYears(prev => {
-            const current = prev ?? 0;
-            if (periodUnit === 'Year') {
-                const next = current - 1;
-                return next >= MIN_YEARS ? next : MIN_YEARS;
-            } else {
-                const next = current - (1/12);
-                // Ensure at least 1 month
-                return next >= (1/12) ? next : (1/12);
-            }
-        });
-    };
-
-    const handleIncrementRate = () => {
-        setInterestRate(prev => (prev ?? 0) + 0.5);
-    };
-
-    const handleDecrementRate = () => {
-        setInterestRate(prev => {
-            const next = (prev ?? 0) - 0.5;
-            return next >= MIN_RATE ? next : MIN_RATE;
-        });
-    };
-
-    const startAdjusting = (type: 'incAmount' | 'decAmount' | 'incYears' | 'decYears' | 'incRate' | 'decRate') => {
-        // Auto-hide keyboard on mobile
-        if (document.activeElement instanceof HTMLElement) {
-            document.activeElement.blur();
-        }
-
-        let action;
-        switch (type) {
-            case 'incAmount': action = handleIncrementAmount; break;
-            case 'decAmount': action = handleDecrementAmount; break;
-            case 'incYears': action = handleIncrementYears; break;
-            case 'decYears': action = handleDecrementYears; break;
-            case 'incRate': action = handleIncrementRate; break;
-            case 'decRate': action = handleDecrementRate; break;
-        }
-        
-        if (!action) return;
-        action();
-        
-        if (timerRef.current) clearTimeout(timerRef.current as any);
-
-        timerRef.current = setTimeout(() => {
-            timerRef.current = setInterval(action!, 80) as any;
-        }, 500);
-    };
-
-    const stopAdjusting = () => {
-        if (timerRef.current) {
-            clearTimeout(timerRef.current as any);
-            clearInterval(timerRef.current as any);
-            timerRef.current = null;
-        }
-    };
-
-    const handleRateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value === "") {
-            setInterestRate(null);
-            return;
-        }
-        const val = Number(e.target.value);
-        setInterestRate(val);
-    };
-
-    const handleYearsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value === "") {
-            setYears(null);
-            return;
-        }
-        const val = Number(e.target.value);
-        if (periodUnit === 'Year') {
-            setYears(val);
-        } else {
-            setYears(val / 12);
-        }
-    };
-
-    const togglePeriodUnit = (unit: 'Year' | 'Month') => {
-        if (unit === periodUnit) return;
-        setPeriodUnit(unit);
-        if (unit === 'Year') {
-            setYears(prev => prev ? Math.round(prev) : null);
-        }
-    };
+/**
+ * Calculator View (Template)
+ * Purely presentational component for the loan calculator interface.
+ */
+export default function CalculatorView(props: CalculatorViewProps) {
+    const {
+        loanAmount, interestRate, years, emi, totalPayment, totalInterest,
+        repaymentType, setRepaymentType, periodUnit, mounted,
+        formatCurrency, handleAmountChange, handleYearsChange, handleRateChange,
+        startAdjusting, stopAdjusting, togglePeriodUnit,
+        MIN_YEARS, MAX_RATE, MIN_RATE
+    } = props;
 
     return (
         <div className={styles.card}>
@@ -219,7 +67,6 @@ const Calculator: React.FC<CalculatorProps> = ({
                             onPointerLeave={stopAdjusting}
                             className={styles.adjustBtn}
                             type="button"
-                            title="Decrease by 100,000"
                         >
                             -
                         </button>
@@ -229,7 +76,6 @@ const Calculator: React.FC<CalculatorProps> = ({
                             onPointerLeave={stopAdjusting}
                             className={styles.adjustBtn}
                             type="button"
-                            title="Increase by 100,000"
                         >
                             +
                         </button>
@@ -262,7 +108,6 @@ const Calculator: React.FC<CalculatorProps> = ({
                             onPointerLeave={stopAdjusting}
                             className={styles.adjustBtn}
                             type="button"
-                            title={`Decrease by 1 ${periodUnit}`}
                         >
                             -
                         </button>
@@ -272,7 +117,6 @@ const Calculator: React.FC<CalculatorProps> = ({
                             onPointerLeave={stopAdjusting}
                             className={styles.adjustBtn}
                             type="button"
-                            title={`Increase by 1 ${periodUnit}`}
                         >
                             +
                         </button>
@@ -321,7 +165,6 @@ const Calculator: React.FC<CalculatorProps> = ({
                             onPointerLeave={stopAdjusting}
                             className={styles.adjustBtn}
                             type="button"
-                            title="Decrease by 0.5%"
                         >
                             -
                         </button>
@@ -331,7 +174,6 @@ const Calculator: React.FC<CalculatorProps> = ({
                             onPointerLeave={stopAdjusting}
                             className={styles.adjustBtn}
                             type="button"
-                            title="Increase by 0.5%"
                         >
                             +
                         </button>
@@ -378,10 +220,6 @@ const Calculator: React.FC<CalculatorProps> = ({
                     <span className={styles.breakdownValue}>{mounted ? formatCurrency(totalInterest) : "..."}</span>
                 </div>
             </div>
-
-
         </div>
     );
-};
-
-export default Calculator;
+}

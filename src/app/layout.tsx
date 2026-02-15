@@ -4,9 +4,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "./context/ThemeContext";
-import Navbar from "./components/Navbar";
-import BottomNav from "./components/BottomNav";
-import MobileNavigationHandler from "./components/MobileNavigationHandler";
+import Navbar from "@/components/Navbar";
+import BottomNav from "@/components/BottomNav";
+import MobileNavigationHandler from "@/components/MobileNavigationHandler";
 
 /*
 const geistSans = Geist({
