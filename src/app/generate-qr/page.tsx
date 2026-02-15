@@ -38,12 +38,16 @@ function QRCodeGeneratorContent() {
                         type: "rounded",
                         gradient: {
                             type: "linear",
-                            rotation: 46 * (Math.PI / 180), // 46 degrees in radians
+                            rotation: 180, // 46 degrees in radians
                             colorStops: [
-                                { offset: 0, color: "#dab3ca" }, // Dark Magenta/Purple
-                                { offset: 1, color: "#bad8c7" }  // Dark Green
+                                { offset: 0, color: "#ffffff" }, // Dark Magenta/Purple
+                                { offset: 1, color: "#daf1ff" }  // Dark Green
                             ]
                         }
+                    },
+                    cornersSquareOptions: {
+                        type: "extra-rounded",
+                        color: "#3da4ff"
                     },
                     backgroundOptions: {
                         color: "#1e293b",
@@ -134,7 +138,7 @@ function QRCodeGeneratorContent() {
                 <h1 className="h3 mb-0" style={{ color: 'var(--primary)' }}>QR Generator</h1>
             </div>
 
-            <div className="card p-4 text-center" style={{
+            <div className="card p-3 text-center" style={{
                 backgroundColor: 'var(--surface)',
                 color: 'var(--foreground)',
                 borderColor: 'var(--border-color)',
@@ -157,7 +161,7 @@ function QRCodeGeneratorContent() {
                     />
                 </div>
 
-                <div className="d-flex justify-content-center mb-4">
+                <div className="d-flex justify-content-center mb-2">
                     {/* Hidden container for library rendering */}
                     <div
                         ref={qrRef}
@@ -195,11 +199,9 @@ function QRCodeGeneratorContent() {
                     )}
                 </div>
 
-                {copyStatus && (
-                    <div className="alert alert-success py-1 mb-3" style={{ fontSize: '0.875rem' }}>
-                        {copyStatus}
-                    </div>
-                )}
+                <small className="mb-3" style={{ fontStyle: 'italic', color: 'var(--text-muted)' }}>
+                    Long press the QR code to copy it on mobile devices. Use the buttons below to download or copy the URL/text.
+                </small>
 
                 <div className="d-grid gap-2">
                     <button

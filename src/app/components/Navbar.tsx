@@ -10,15 +10,25 @@ export default function Navbar() {
     const { isDark, toggleTheme } = useTheme();
     const pathname = usePathname();
 
+    const getPageTitle = () => {
+        if (pathname === "/") return "Calculator";
+        if (pathname === "/generate-qr") return "QR Generator";
+        return "LK Super";
+    };
+
     return (
-        <nav className="navbar navbar-expand navbar-light mb-4" style={{ backgroundColor: 'var(--surface)', borderBottom: '1px solid var(--border-color)' }}>
+        <nav className="navbar navbar-expand navbar-light fixed-top" style={{ backgroundColor: 'var(--surface)', borderBottom: '1px solid var(--border-color)' }}>
             <div className="container">
-                <Link href="/" className="navbar-brand d-flex align-items-center" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>
-                    LK Super
+                {/* Desktop Link, Mobile Text */}
+                <Link href="/" className="navbar-brand d-none d-md-flex align-items-center" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>
+                    {getPageTitle()}
                 </Link>
+                <div className="navbar-brand d-flex d-md-none align-items-center" style={{ color: 'var(--primary)', fontWeight: 'bold' }}>
+                    {getPageTitle()}
+                </div>
                 
                 <div className="d-flex align-items-center">
-                    <ul className="navbar-nav d-flex flex-row me-3">
+                    <ul className="navbar-nav d-flex flex-row me-3 d-none d-md-flex">
                         <li className="nav-item me-3">
                             <Link 
                                 href="/" 
@@ -37,10 +47,8 @@ export default function Navbar() {
                                 QR
                             </Link>
                         </li>
-                        <li className="nav-item d-flex align-items-center">
-                            <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
-                        </li>
                     </ul>
+                    <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
                 </div>
             </div>
         </nav>

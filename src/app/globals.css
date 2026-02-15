@@ -16,6 +16,7 @@
   --result-section-shadow: none;
   --value-display-bg: rgba(237, 244, 255, 0.08);
   --value-display-shadow: none;
+  --bottom-nav-item-bg: var(--surface-highlight);
 }
 
 .light {
@@ -35,6 +36,7 @@
   --result-section-shadow: none;
   --value-display-bg: rgba(29, 78, 216, 0.1);
   --value-display-shadow: none;
+  --bottom-nav-item-bg: #d5dce6;
 }
 
 * {
@@ -51,6 +53,12 @@ body {
   color: var(--foreground);
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+@media (max-width: 767.98px) {
+  body {
+    padding-bottom: 80px;
+  }
 }
 
 a {

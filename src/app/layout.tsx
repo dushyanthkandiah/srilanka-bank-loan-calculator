@@ -5,6 +5,8 @@ import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
 import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "./components/Navbar";
+import BottomNav from "./components/BottomNav";
+import MobileNavigationHandler from "./components/MobileNavigationHandler";
 
 /*
 const geistSans = Geist({
@@ -96,8 +98,10 @@ export default function RootLayout({
       </head>
       <body suppressHydrationWarning>
         <ThemeProvider>
+          <MobileNavigationHandler />
           <Navbar />
           {children}
+          <BottomNav />
           <Analytics />
         </ThemeProvider>
       </body>
