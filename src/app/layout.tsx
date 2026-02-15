@@ -3,6 +3,8 @@ import type { Metadata, Viewport } from "next";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
+import { ThemeProvider } from "./context/ThemeContext";
+import Navbar from "./components/Navbar";
 
 /*
 const geistSans = Geist({
@@ -92,10 +94,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      {/* <body className={`${geistSans.variable} ${geistMono.variable}`}> */}
       <body>
-        {children}
-        <Analytics />
+        <ThemeProvider>
+          <Navbar />
+          {children}
+          <Analytics />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -1,11 +1,10 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import styles from "./components/Calculator.module.css";
-import Calculator from "./components/Calculator";
+import styles from "./calculator/Calculator.module.css";
+import Calculator from "./calculator/Calculator";
 
-import BreakdownTable from "./components/BreakdownTable";
-import ThemeToggle from "./components/ThemeToggle";
+import BreakdownTable from "./calculator/BreakdownTable";
 import InstallPrompt from "./components/InstallPrompt";
 
 interface PaymentSchedule {
@@ -17,7 +16,6 @@ interface PaymentSchedule {
 }
 
 export default function Home() {
-  // State for inputs
   // State for inputs
   const [loanAmount, setLoanAmount] = useState<number | null>(100000);
   const [interestRate, setInterestRate] = useState<number | null>(12);
@@ -31,59 +29,60 @@ export default function Home() {
   const [totalPayment, setTotalPayment] = useState<number>(0);
   const [totalInterest, setTotalInterest] = useState<number>(0);
   const [schedule, setSchedule] = useState<PaymentSchedule[]>([]);
-  const [isDark, setIsDark] = useState<boolean>(true);
   const [repaymentType, setRepaymentType] = useState<string>("equated");
   const [periodUnit, setPeriodUnit] = useState<'Year' | 'Month'>('Year');
 
   // Load from LocalStorage on Mount
   useEffect(() => {
-    // Load Calculator Data
-    const savedData = localStorage.getItem("loan_calculator_data");
-    if (savedData) {
-      try {
-        const { amount, rate, time, type, unit } = JSON.parse(savedData);
-        if (amount) setLoanAmount(amount);
-        if (rate) setInterestRate(rate);
-        if (time) setYears(time);
-        if (type) setRepaymentType(type);
-        if (unit && (unit === 'Year' || unit === 'Month')) setPeriodUnit(unit);
-      } catch (e) {
-        console.error("Failed to parse saved data", e);
+    // Handle Share Target
+    // Handle Share Target
+    let sharedDataFound = false;
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const text = params.get('text') || '';
+      const title = params.get('title') || '';
+      const url = params.get('url') || '';
+      
+      const combined = `${title} ${text} ${url}`.trim();
+      if (combined) {
+        const matches = combined.match(/\d+([,.]\d+)?/g);
+        if (matches) {
+          const values = matches.map(m => parseFloat(m.replace(/,/g, '')));
+          const potentialAmount = Math.max(...values);
+          if (potentialAmount > 1000) {
+            setLoanAmount(potentialAmount);
+            const potentialRate = values.find(v => v > 0 && v < 50 && v !== potentialAmount);
+            if (potentialRate) setInterestRate(potentialRate);
+            const potentialYears = values.find(v => v > 0 && v < 40 && v !== potentialAmount && v !== potentialRate);
+            if (potentialYears) setYears(potentialYears);
+            sharedDataFound = true;
+          } else if (values.length > 0) {
+            setLoanAmount(values[0]);
+            sharedDataFound = true;
+          }
+        }
+        // Clear parameters from URL without refreshing
+        window.history.replaceState({}, document.title, window.location.pathname);
       }
     }
 
-    // Load Theme Data
-    const savedTheme = localStorage.getItem("is_dark_theme");
-    if (savedTheme !== null) {
-      const isDarkSaved = JSON.parse(savedTheme);
-      setIsDark(isDarkSaved);
-      if (!isDarkSaved) {
-        document.body.classList.add("light");
-      }
-    } else {
-      // Check system preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setIsDark(prefersDark);
-      if (!prefersDark) {
-        document.body.classList.add("light");
+    // Load Calculator Data
+    if (!sharedDataFound) {
+      const savedData = localStorage.getItem("loan_calculator_data");
+      if (savedData) {
+        try {
+          const { amount, rate, time, type, unit } = JSON.parse(savedData);
+          if (amount) setLoanAmount(amount);
+          if (rate) setInterestRate(rate);
+          if (time) setYears(time);
+          if (type) setRepaymentType(type);
+          if (unit && (unit === 'Year' || unit === 'Month')) setPeriodUnit(unit);
+        } catch (e) {
+          console.error("Failed to parse saved data", e);
+        }
       }
     }
   }, []);
-
-  // Toggle Theme
-  const toggleTheme = () => {
-    const newIsDark = !isDark;
-    setIsDark(newIsDark);
-    localStorage.setItem("is_dark_theme", JSON.stringify(newIsDark));
-
-    if (newIsDark) {
-      document.body.classList.remove("light");
-    } else {
-      document.body.classList.add("light");
-    }
-  };
-
-
 
   // Save to LocalStorage on Change
   useEffect(() => {
@@ -179,9 +178,11 @@ export default function Home() {
   };
 
   return (
-    <main className={`${styles.container} ${!isDark ? "light" : ""}`}>
-      <ThemeToggle isDark={isDark} toggleTheme={toggleTheme} />
-      <div className="container-fluid px-0 px-md-3">
+    <main className={styles.main}>
+      <div className="container py-4">
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h1 className="h3 mb-0">Loan Calculator</h1>
+        </div>
         <div className="row g-0 g-md-4 justify-content-center align-items-start">
           <div className="col-12 col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0 d-flex justify-content-center">
             <Calculator
