@@ -8,6 +8,7 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
   const region = request.headers.get('x-vercel-ip-country-region') || 'Unknown';
   const latitude = request.headers.get('x-vercel-ip-latitude') || 'Unknown';
   const longitude = request.headers.get('x-vercel-ip-longitude') || 'Unknown';
+  const userAgent = request.headers.get('user-agent') || 'Unknown';
 
   // Call the tracking API route only for page visits (HTML requests)
   // This prevents tracking static assets, service workers, manifests, etc.
@@ -25,6 +26,7 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
           'x-visitor-region': region,
           'x-visitor-latitude': latitude,
           'x-visitor-longitude': longitude,
+          'x-visitor-ua': userAgent,
         },
       }).then(async (res) => {
         if (!res.ok) {
