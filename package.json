@@ -11,8 +11,11 @@
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
+    "@upstash/redis": "^1.36.2",
     "@vercel/analytics": "^1.6.1",
+    "@vercel/kv": "^3.0.0",
     "bootstrap": "^5.3.8",
+    "googleapis": "^171.4.0",
     "next": "16.1.6",
     "qr-code-styling": "^1.9.2",
     "react": "19.2.3",
