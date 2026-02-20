@@ -32,7 +32,13 @@ export async function appendToSheet(values: string[]) {
     });
 
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.code === 403 && error.message?.includes('Google Sheets API has not been used')) {
+       console.error('\n\n!!! GOOGLE SHEETS API NOT ENABLED !!!');
+       console.error('You must enable the Google Sheets API for your project.');
+       console.error('Please visit this URL to enable it: https://console.developers.google.com/apis/api/sheets.googleapis.com/overview');
+       console.error('\n');
+    }
     console.error('Error appending to Google Sheet:', error);
     throw error;
   }
