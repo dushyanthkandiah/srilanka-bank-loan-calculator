@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { appendToSheet } from '@/lib/googleSheets';
 
 export async function GET(request: NextRequest) {
+    console.log('API Route: /api/location called');
     try {
         const headers = request.headers;
         debugger;
@@ -15,8 +16,11 @@ export async function GET(request: NextRequest) {
         const timestamp = new Date().toISOString();
 
         const row = [timestamp, country, city, region, latitude, longitude];
+        console.log('API Route: Appending to sheet:', row);
 
         await appendToSheet(row);
+        
+        console.log('API Route: Successfully appended to sheet');
 
         return NextResponse.json({ success: true, message: 'Visit logged' });
     } catch (error) {

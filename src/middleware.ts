@@ -22,7 +22,13 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
         'x-visitor-latitude': latitude,
         'x-visitor-longitude': longitude,
       },
-    }).catch((err) => console.error('Error tracking visit:', err))
+    }).then(async (res) => {
+      if (!res.ok) {
+        console.error(`Middleware: Failed to track visit. Status: ${res.status}`);
+        const text = await res.text();
+        console.error('Middleware: Response:', text);
+      }
+    }).catch((err) => console.error('Middleware: Error tracking visit:', err))
   );
 
   const requestHeaders = new Headers(request.headers);
