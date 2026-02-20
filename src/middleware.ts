@@ -9,27 +9,32 @@ export function middleware(request: NextRequest, event: NextFetchEvent) {
   const latitude = request.headers.get('x-vercel-ip-latitude') || 'Unknown';
   const longitude = request.headers.get('x-vercel-ip-longitude') || 'Unknown';
 
-  // Call the tracking API route
-  // We use event.waitUntil to ensure the fetch completes even after the response is sent
-  const apiUrl = new URL('/api/location', request.url);
-  event.waitUntil(
-    fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'x-visitor-country': country,
-        'x-visitor-city': city,
-        'x-visitor-region': region,
-        'x-visitor-latitude': latitude,
-        'x-visitor-longitude': longitude,
-      },
-    }).then(async (res) => {
-      if (!res.ok) {
-        console.error(`Middleware: Failed to track visit. Status: ${res.status}`);
-        const text = await res.text();
-        console.error('Middleware: Response:', text);
-      }
-    }).catch((err) => console.error('Middleware: Error tracking visit:', err))
-  );
+  // Call the tracking API route only for page visits (HTML requests)
+  // This prevents tracking static assets, service workers, manifests, etc.
+  const isPageRequest = request.method === 'GET' && request.headers.get('accept')?.includes('text/html');
+
+  if (isPageRequest) {
+    // We use event.waitUntil to ensure the fetch completes even after the response is sent
+    const apiUrl = new URL('/api/location', request.url);
+    event.waitUntil(
+      fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'x-visitor-country': country,
+          'x-visitor-city': city,
+          'x-visitor-region': region,
+          'x-visitor-latitude': latitude,
+          'x-visitor-longitude': longitude,
+        },
+      }).then(async (res) => {
+        if (!res.ok) {
+          console.error(`Middleware: Failed to track visit. Status: ${res.status}`);
+          const text = await res.text();
+          console.error('Middleware: Response:', text);
+        }
+      }).catch((err) => console.error('Middleware: Error tracking visit:', err))
+    );
+  }
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-visitor-country', country);
