@@ -7,6 +7,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
 import MobileNavigationHandler from "@/components/MobileNavigationHandler";
+import StructuredData from "@/components/StructuredData/StructuredData";
 
 /*
 const geistSans = Geist({
@@ -30,16 +31,9 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: "Best Loan Calculator Sri Lanka | Personal, Home Loan & Vehicle Leasing",
   description: "Advanced loan calculator for Sri Lanka. Calculate Personal Loans, Home Loans, and Vehicle Leasing installments with Equated or Reducing Balance repayment types. Hosted on Vercel.",
-  manifest: "/manifest.json",
-  icons: {
-    icon: "/icon.png",
-    apple: "/icon.png",
-  },
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "SL Loan Calc",
-  },
+  applicationName: "Sri Lanka Loan Calculator",
+  authors: [{ name: "Sri Lanka Loan Calculator Team" }],
+  generator: "Next.js",
   keywords: [
     "loan calculator",
     "sri lanka",
@@ -50,19 +44,61 @@ export const metadata: Metadata = {
     "reducing balance",
     "EMI calculator",
     "vercel",
-    "bank loan calculator sri lanka"
+    "bank loan calculator sri lanka",
+    "finance",
+    "interest rates",
+    "monthly installment"
   ],
+  referrer: "origin-when-cross-origin",
+  creator: "Sri Lanka Loan Calculator Team",
+  publisher: "Sri Lanka Loan Calculator Team",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  manifest: "/manifest.json",
+  icons: {
+    icon: "/icon.png",
+    apple: "/icon.png",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "SL Loan Calc",
+  },
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   openGraph: {
     title: "Loan Calculator Sri Lanka | Personal & Home Loan Tools",
     description: "Calculate your monthly installments for Personal Loans, Home Loans, and Vehicle Leasing in Sri Lanka. Support for Equated and Reducing Balance repayment types.",
-    type: "website",
-    locale: "en_LK",
+    url: "https://srilanka-loan-calculator.vercel.app",
     siteName: "SL Loan Calculator",
+    images: [
+      {
+        url: "/icon.png",
+        width: 192,
+        height: 192,
+        alt: "Loan Calculator Sri Lanka",
+      },
+    ],
+    locale: "en_LK",
+    type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Sri Lanka Loan & Leasing Calculator",
     description: "Plan your finances with our advanced Loan Calculator. Supports all major Sri Lankan bank interest methods.",
+    images: ["/icon.png"],
   },
   alternates: {
     canonical: "/",
@@ -76,27 +112,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "SoftwareApplication",
-              "name": "Personal Loan Calculator",
-              "operatingSystem": "All",
-              "applicationCategory": "FinanceApplication",
-              "description": "Calculate personal loan installments with Equated Monthly Installment (EMI) or Reducing Balance methods.",
-              "offers": {
-                "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "USD"
-              }
-            }),
-          }}
-        />
-      </head>
       <body suppressHydrationWarning>
+        <StructuredData />
         <ThemeProvider>
           <MobileNavigationHandler />
           <Navbar />

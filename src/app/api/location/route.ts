@@ -56,18 +56,23 @@ export async function GET(request: NextRequest) {
       device
     };
 
-    console.log('API Route: Inserting into Supabase visits table:', visitData);
+    // Only insert into Supabase in production
+    if (process.env.NODE_ENV === 'production') {
+      console.log('API Route: Inserting into Supabase visits table:', visitData);
 
-    const { error } = await supabase
-      .from('visits')
-      .insert(visitData);
+      const { error } = await supabase
+        .from('visits')
+        .insert(visitData);
 
-    if (error) {
-      console.error('API Route: Error inserting into Supabase:', error);
-      throw error;
+      if (error) {
+        console.error('API Route: Error inserting into Supabase:', error);
+        throw error;
+      }
+
+      console.log('API Route: Successfully inserted into Supabase');
+    } else {
+      console.log('API Route: Development mode - skipping Supabase insert', visitData);
     }
-
-    console.log('API Route: Successfully inserted into Supabase');
 
     return NextResponse.json({ success: true, message: 'Visit logged' });
   } catch (error) {

@@ -38,6 +38,14 @@ export default function NavbarView({ isDark, toggleTheme, pathname, pageTitle }:
                         </li>
                         <li className="nav-item me-3">
                             <Link 
+                                href="/credit-card-installment" 
+                                className={`nav-link ${pathname === '/credit-card-installment' ? 'active' : ''}`}
+                            >
+                                CC Installment
+                            </Link>
+                        </li>
+                        <li className="nav-item me-3">
+                            <Link 
                                 href="/generate-qr" 
                                 className={`nav-link ${pathname === '/generate-qr' ? 'active' : ''}`}
                             >

@@ -1,0 +1,505 @@
+﻿.container {
+    min-height: 100vh;
+    padding: 2rem;
+    background: var(--background);
+    /* Override gradient for dark mode, but use simple color for dynamic switch if complex */
+    background: radial-gradient(circle at top left, var(--surface), var(--background));
+}
+
+@media (max-width: 767px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+}
+
+.calculatorWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+@media (min-width: 992px) {
+    .calculatorWrapper {
+        max-width: 1100px;
+        /* No longer flex-row here, handled by splitLayout */
+    }
+}
+
+.splitLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+@media (min-width: 992px) {
+    .splitLayout {
+        flex-direction: row;
+        align-items: stretch;
+    }
+    
+    .card, .resultCard {
+        flex: 1;
+    }
+}
+
+.bankCard {
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 2rem;
+    width: 100%;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle pattern or gradient for bank card */
+.bankCard::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+    pointer-events: none;
+}
+
+.dropdownRow {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.dropdownCol {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+@media (max-width: 600px) {
+    .dropdownRow {
+        flex-direction: column;
+    }
+}
+
+.selectInput {
+    width: 100%;
+    background: var(--surface-highlight);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--foreground);
+    padding: 1rem;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s;
+    appearance: none;
+    /* Custom arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1.25rem;
+}
+
+.selectInput:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+}
+
+.tooltipContainer {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    margin-left: 0.5rem;
+    cursor: help;
+}
+
+.tooltipIcon {
+    width: 16px;
+    height: 16px;
+    color: var(--text-muted);
+    transition: color 0.2s;
+}
+
+.tooltipContainer:hover .tooltipIcon {
+    color: var(--primary);
+}
+
+.tooltipText {
+    visibility: hidden;
+    width: 200px;
+    background-color: var(--surface);
+    color: var(--foreground);
+    text-align: center;
+    border-radius: 6px;
+    padding: 0.5rem;
+    position: absolute;
+    z-index: 10;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 0.85rem;
+    font-weight: normal;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    pointer-events: none;
+}
+
+.tooltipContainer:hover .tooltipText {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltipText::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--surface) transparent transparent transparent;
+}
+
+
+
+.card {
+    background: var(--surface);
+    /* Fallback/Dark default */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 2.5rem;
+    width: 100%;
+    /* max-width removed here, handled by wrapper */
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.resultCard {
+    background: var(--surface);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 2.5rem;
+    width: 100%;
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    
+    /* Distinct style */
+    background: radial-gradient(circle at top right, rgba(var(--primary-rgb), 0.15), var(--surface));
+    border-color: rgba(var(--primary-rgb), 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.resultCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+
+@media (max-width: 767px) {
+    .card, .resultCard {
+        padding: 2rem 1.5rem;
+        border-radius: 12px;
+    }
+}
+
+.header {
+    text-align: center;
+    
+}
+
+.title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--foreground);
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: var(--text-muted);
+    font-size: 1rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.labelRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.valueDisplay {
+    font-family: monospace;
+    font-size: 1.15rem;
+    color: var(--primary);
+    font-weight: 600;
+    background: var(--value-display-bg);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    box-shadow: var(--value-display-shadow);
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.currencySymbol {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.numberInput {
+    width: 100%;
+    background: var(--surface-highlight);
+    border: 1px solid transparent;
+    color: var(--foreground);
+    padding: 0.75rem 1rem 0.75rem 0.75rem;
+    /* adjusted for symbol if needed */
+    border-radius: var(--radius);
+    font-size: 1.15rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.numberInputWithSymbol {
+    padding-left: 2.5rem;
+}
+
+.numberInput:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+}
+
+.toggleGroup {
+    display: flex;
+    background: var(--surface-highlight);
+    border-radius: var(--radius);
+    padding: 0.35rem;
+    gap: 0.35rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.toggleBtn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    padding: 0.85rem 0.5rem;
+    border-radius: calc(var(--radius) - 4px);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    white-space: nowrap;
+}
+
+.toggleBtnActive {
+    background: var(--primary);
+    color: var(--on-primary);
+    /* Dark text on gold for better contrast */
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+}
+
+.toggleBtn:hover:not(.toggleBtnActive) {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--foreground);
+}
+
+
+/* Range Slider Styling */
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: var(--surface-highlight);
+    border-radius: 3px;
+    outline: none;
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    transition: transform 0.1s;
+    box-shadow: 0 0 10px rgba(var(--primary-rgb), 0.5);
+}
+
+.slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+.resultSection {
+    background: var(--result-section-bg);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    text-align: center;
+    margin-top: 1rem;
+    border: none;
+    box-shadow: var(--result-section-shadow);
+}
+
+.resultLabel {
+    color: var(--text-muted);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.resultValue {
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    font-weight: 800;
+    color: var(--primary);
+    text-shadow: 0 0 20px rgba(var(--primary-rgb), 0.3);
+    overflow-wrap: break-word;
+    word-break: break-all;
+    /* Fallback for very long numbers */
+}
+
+@media (max-width: 480px) {
+    .resultValue {
+        font-size: 1.5rem;
+        /* Further reduction for very small screens */
+    }
+}
+
+.breakdown {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1rem;
+}
+
+.breakdownItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.breakdownLabel {
+    color: var(--text-muted);
+}
+
+.breakdownValue {
+    color: var(--foreground);
+    font-weight: 600;
+}
+
+.inputRowWithButtons {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.inputRowWithButtons .inputWrapper {
+    flex: 1;
+}
+
+.adjustButtons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.adjustBtn {
+    background: var(--surface-highlight);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--foreground);
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.adjustBtn:hover {
+    background: var(--primary);
+    color: var(--on-primary);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+}
+
+.adjustBtn:active {
+    transform: translateY(0);
+}
+
+.periodToggleGroup {
+    display: flex;
+    background: var(--surface-highlight);
+    border-radius: var(--radius);
+    padding: 0.25rem;
+    gap: 0.25rem;
+    width: fit-content;
+    margin-top: 0.5rem;
+}
+
+.periodToggleBtn {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    padding: 0.4rem 0.8rem;
+    border-radius: calc(var(--radius) - 6px);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.periodToggleBtnActive {
+    background: var(--primary);
+    color: var(--on-primary);
+    box-shadow: 0 2px 8px rgba(var(--primary-rgb), 0.2);
+}
+
+.periodToggleBtn:hover:not(.periodToggleBtnActive) {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--foreground);
+}
