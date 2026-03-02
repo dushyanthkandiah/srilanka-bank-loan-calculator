@@ -8,7 +8,6 @@ import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
 import MobileNavigationHandler from "@/components/MobileNavigationHandler";
 import StructuredData from "@/components/StructuredData/StructuredData";
-import GoogleAdSense from "@/components/AdSense/GoogleAdSense";
 
 /*
 const geistSans = Geist({
@@ -30,6 +29,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://srilanka-bank-loan-calculator.vercel.app"),
   title: "Best Loan Calculator Sri Lanka | Personal, Home Loan & Vehicle Leasing",
   description: "Advanced loan calculator for Sri Lanka. Calculate Personal Loans, Home Loans, and Vehicle Leasing installments with Equated or Reducing Balance repayment types. Hosted on Vercel.",
   applicationName: "Sri Lanka Loan Calculator",
@@ -82,7 +82,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Loan Calculator Sri Lanka | Personal & Home Loan Tools",
     description: "Calculate your monthly installments for Personal Loans, Home Loans, and Vehicle Leasing in Sri Lanka. Support for Equated and Reducing Balance repayment types.",
-    url: "https://srilanka-loan-calculator.vercel.app",
+    url: "https://srilanka-bank-loan-calculator.vercel.app",
     siteName: "SL Loan Calculator",
     images: [
       {
@@ -116,8 +116,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="google-adsense-account" content="ca-pub-5913105330451891" />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5913105330451891"
+          crossOrigin="anonymous"
+        ></script>
+      </head>
       <body suppressHydrationWarning>
-        <GoogleAdSense />
         <StructuredData />
         <ThemeProvider>
           <MobileNavigationHandler />

@@ -8,7 +8,7 @@ export default function StructuredData() {
     description: 'Advanced loan calculator for Sri Lanka. Calculate Personal Loans, Home Loans, and Vehicle Leasing installments with Equated or Reducing Balance repayment types.',
     operatingSystem: 'Web',
     applicationCategory: 'FinanceApplication',
-    url: 'https://srilanka-loan-calculator.vercel.app',
+    url: 'https://srilanka-bank-loan-calculator.vercel.app',
     offers: {
       '@type': 'Offer',
       price: '0',
