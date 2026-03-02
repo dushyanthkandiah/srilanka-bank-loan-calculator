@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Calculator from "@/components/Calculator";
 import BreakdownTable from "@/components/BreakdownTable";
-import { AdUnit } from "@/components/AdSense";
 import styles from "./page.module.css"; // Assuming there might be some page level styles or I'll check
 
 interface PaymentSchedule {
@@ -175,14 +174,6 @@ export default function Home() {
               periodUnit={periodUnit}
               setPeriodUnit={setPeriodUnit}
             />
-            {process.env.NEXT_PUBLIC_ADSENSE_ID && (
-              <div className="mt-4 w-100">
-                <AdUnit 
-                  pId={process.env.NEXT_PUBLIC_ADSENSE_ID} 
-                  slotId="XXXXXXXXXX" 
-                />
-              </div>
-            )}
           </div>
           <div className="col-12 col-md-6 col-lg-7 col-xl-8">
             <BreakdownTable schedule={schedule} />

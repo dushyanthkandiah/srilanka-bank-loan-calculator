@@ -8,7 +8,7 @@ import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
 import MobileNavigationHandler from "@/components/MobileNavigationHandler";
 import StructuredData from "@/components/StructuredData/StructuredData";
-import { AdSense } from "@/components/AdSense";
+import GoogleAdSense from "@/components/AdSense/GoogleAdSense";
 
 /*
 const geistSans = Geist({
@@ -114,7 +114,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>
-        <AdSense pId={process.env.NEXT_PUBLIC_ADSENSE_ID || ""} />
+        <GoogleAdSense />
         <StructuredData />
         <ThemeProvider>
           <MobileNavigationHandler />

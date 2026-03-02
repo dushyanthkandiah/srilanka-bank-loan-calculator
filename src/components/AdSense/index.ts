@@ -1,2 +1,2 @@
-export { default as AdSense } from './AdSense';
-export { default as AdUnit } from './AdUnit';
+export { default as GoogleAdSense } from "./GoogleAdSense";
+export { default as AdUnit } from "./AdUnit";
