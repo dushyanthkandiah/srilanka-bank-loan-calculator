@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import BottomNav from "@/components/BottomNav";
 import MobileNavigationHandler from "@/components/MobileNavigationHandler";
 import StructuredData from "@/components/StructuredData/StructuredData";
+import { GoogleAdSense } from "@/components/AdSense";
 
 /*
 const geistSans = Geist({
@@ -117,14 +118,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="google-adsense-account" content="ca-pub-5913105330451891" />
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5913105330451891"
-          crossOrigin="anonymous"
-        ></script>
       </head>
       <body suppressHydrationWarning>
+        <GoogleAdSense />
         <StructuredData />
         <ThemeProvider>
           <MobileNavigationHandler />
