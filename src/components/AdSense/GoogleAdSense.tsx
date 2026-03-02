@@ -6,11 +6,8 @@ type Props = {
 };
 
 const GoogleAdSense = ({ pId }: Props) => {
-  const adsenseId = pId || process.env.NEXT_PUBLIC_ADSENSE_ID;
-
-  if (!adsenseId) {
-    return null;
-  }
+  // Use prop, then env var, then hardcoded fallback for verification
+  const adsenseId = pId || process.env.NEXT_PUBLIC_ADSENSE_ID || "ca-pub-5913105330451891";
 
   // Ensure it starts with ca-pub-
   const client = adsenseId.startsWith("ca-pub-") ? adsenseId : `ca-pub-${adsenseId}`;
