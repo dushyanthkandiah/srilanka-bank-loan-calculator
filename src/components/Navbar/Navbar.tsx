@@ -16,7 +16,7 @@ export default function Navbar() {
     const getPageTitle = () => {
         if (pathname === "/") return "Calculator";
         if (pathname === "/generate-qr") return "QR Generator";
-        if (pathname === "/credit-card-installment") return "CC Installment";
+        if (pathname === "/credit-card-installment") return "Credit Card Installment";
         return "LK Super";
     };
 
