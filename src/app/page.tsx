@@ -1,185 +1,51 @@
-"use client";
+import React from "react";
+import { Metadata } from "next";
+import HomeClient from "./HomeClient";
 
-import React, { useState, useEffect } from "react";
-import Calculator from "@/components/Calculator";
-import BreakdownTable from "@/components/BreakdownTable";
-import styles from "./page.module.css"; // Assuming there might be some page level styles or I'll check
+export const metadata: Metadata = {
+  title: "Loan EMI Calculator Sri Lanka | Personal, Home & Vehicle Loans",
+  description: "Calculate monthly installments for personal loans, home loans and vehicle leasing in Sri Lanka. Supports equated balance and reducing balance repayment methods.",
+};
 
-interface PaymentSchedule {
-  month: number;
-  principalPayment: number;
-  interestPayment: number;
-  monthlyInstallment: number;
-  balance: number;
-}
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How to calculate loan EMI in Sri Lanka?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Enter loan amount, repayment period in years, and interest rate. Choose equated balance or reducing balance method. The calculator shows monthly installment, total payment and full amortization schedule."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the difference between equated balance and reducing balance?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Equated balance charges interest on the full principal throughout the loan. Reducing balance charges interest only on the outstanding balance, making it cheaper over time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Which Sri Lankan banks support credit card installment plans?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Commercial Bank, Sampath Bank, HNB, Nations Trust Bank AMEX, HSBC, People's Bank, NDB, Seylan Bank and BOC offer installment plans."
+      }
+    }
+  ]
+};
 
 export default function Home() {
-  // State for inputs
-  const [loanAmount, setLoanAmount] = useState<number | null>(100000);
-  const [interestRate, setInterestRate] = useState<number | null>(12);
-  const [years, setYears] = useState<number | null>(5);
-
-  // State for outputs
-  const [emi, setEmi] = useState<number>(0);
-  const [firstMonthInterest, setFirstMonthInterest] = useState<number>(0);
-  const [firstMonthCapital, setFirstMonthCapital] = useState<number>(0);
-
-  const [totalPayment, setTotalPayment] = useState<number>(0);
-  const [totalInterest, setTotalInterest] = useState<number>(0);
-  const [schedule, setSchedule] = useState<PaymentSchedule[]>([]);
-  const [repaymentType, setRepaymentType] = useState<string>("equated");
-  const [periodUnit, setPeriodUnit] = useState<'Year' | 'Month'>('Year');
-
-  // Load from LocalStorage on Mount
-  useEffect(() => {
-    // Handle Share Target
-    // Handle Share Target
-    let sharedDataFound = false;
-    if (typeof window !== 'undefined') {
-
-
-    }
-
-    // Load Calculator Data
-    if (!sharedDataFound) {
-      const savedData = localStorage.getItem("loan_calculator_data");
-      if (savedData) {
-        try {
-          const { amount, rate, time, type, unit } = JSON.parse(savedData);
-          if (amount) setLoanAmount(amount);
-          if (rate) setInterestRate(rate);
-          if (time) setYears(time);
-          if (type) setRepaymentType(type);
-          if (unit && (unit === 'Year' || unit === 'Month')) setPeriodUnit(unit);
-        } catch (e) {
-          console.error("Failed to parse saved data", e);
-        }
-      }
-    }
-  }, []);
-
-  // Save to LocalStorage on Change
-  useEffect(() => {
-    const data = { amount: loanAmount, rate: interestRate, time: years, type: repaymentType, unit: periodUnit };
-    localStorage.setItem("loan_calculator_data", JSON.stringify(data));
-  }, [loanAmount, interestRate, years, repaymentType, periodUnit]);
-
-  useEffect(() => {
-    calculateLoan();
-  }, [loanAmount, interestRate, years, repaymentType]);
-
-  const calculateLoan = () => {
-    if (loanAmount === null || interestRate === null || years === null) {
-      setEmi(0);
-      setFirstMonthInterest(0);
-      setFirstMonthCapital(0);
-      setTotalPayment(0);
-      setTotalInterest(0);
-      setSchedule([]);
-      return;
-    }
-
-    const principal = loanAmount;
-    const ratePerMonth = interestRate / 12 / 100;
-    const numberOfPayments = years * 12;
-
-    const newSchedule: PaymentSchedule[] = [];
-    let remainingBalance = principal;
-    let totalPaid = 0;
-    let totalInt = 0;
-
-    if (repaymentType === "equated") {
-      let monthlyInstallment = 0;
-      if (interestRate === 0) {
-        monthlyInstallment = principal / numberOfPayments;
-      } else {
-        const numerator = principal * ratePerMonth * Math.pow(1 + ratePerMonth, numberOfPayments);
-        const denominator = Math.pow(1 + ratePerMonth, numberOfPayments) - 1;
-        monthlyInstallment = numerator / denominator;
-      }
-
-      for (let i = 1; i <= numberOfPayments; i++) {
-        const interest = remainingBalance * ratePerMonth;
-        const capital = monthlyInstallment - interest;
-        remainingBalance -= capital;
-
-        if (i === numberOfPayments && Math.abs(remainingBalance) < 1) {
-          remainingBalance = 0;
-        }
-
-        newSchedule.push({
-          month: i,
-          principalPayment: capital,
-          interestPayment: interest,
-          monthlyInstallment: monthlyInstallment,
-          balance: remainingBalance > 0 ? remainingBalance : 0,
-        });
-        totalPaid += monthlyInstallment;
-        totalInt += interest;
-      }
-      setEmi(monthlyInstallment);
-    } else {
-      // Reducing Balance - Equated Principal
-      const equatedPrincipal = principal / numberOfPayments;
-      for (let i = 1; i <= numberOfPayments; i++) {
-        const interest = remainingBalance * ratePerMonth;
-        const installment = equatedPrincipal + interest;
-        remainingBalance -= equatedPrincipal;
-
-        if (i === numberOfPayments && Math.abs(remainingBalance) < 1) {
-          remainingBalance = 0;
-        }
-
-        newSchedule.push({
-          month: i,
-          principalPayment: equatedPrincipal,
-          interestPayment: interest,
-          monthlyInstallment: installment,
-          balance: remainingBalance > 0 ? remainingBalance : 0,
-        });
-        totalPaid += installment;
-        totalInt += interest;
-      }
-      // For reducing balance, show the first month's installment
-      setEmi(newSchedule[0]?.monthlyInstallment || 0);
-    }
-
-    setFirstMonthInterest(newSchedule[0]?.interestPayment || 0);
-    setFirstMonthCapital(newSchedule[0]?.principalPayment || 0);
-    setTotalPayment(totalPaid);
-    setTotalInterest(totalInt);
-    setSchedule(newSchedule);
-  };
-
   return (
-    <main className={styles.main}>
-      <div className="container py-4">
-        <div className="row g-0 g-md-4 justify-content-center align-items-start">
-          <div className="col-12 col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0 d-flex justify-content-center">
-            <Calculator
-              loanAmount={loanAmount}
-              setLoanAmount={setLoanAmount}
-              interestRate={interestRate}
-              setInterestRate={setInterestRate}
-              years={years}
-              setYears={setYears}
-              emi={emi}
-              firstMonthInterest={firstMonthInterest}
-
-              firstMonthCapital={firstMonthCapital}
-              totalPayment={totalPayment}
-              totalInterest={totalInterest}
-              repaymentType={repaymentType}
-              setRepaymentType={setRepaymentType}
-              periodUnit={periodUnit}
-              setPeriodUnit={setPeriodUnit}
-            />
-          </div>
-          <div className="col-12 col-md-6 col-lg-7 col-xl-8">
-            <BreakdownTable schedule={schedule} />
-          </div>
-        </div>
-      </div>
-    </main>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <HomeClient />
+    </>
   );
 }

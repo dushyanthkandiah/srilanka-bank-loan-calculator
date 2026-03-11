@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest, NextFetchEvent } from 'next/server';
 
-export function middleware(request: NextRequest, event: NextFetchEvent) {
+export function proxy(request: NextRequest, event: NextFetchEvent) {
   // Get geo information from Vercel's injected headers
   const country = request.headers.get('x-vercel-ip-country') || 'Unknown';
   const city = request.headers.get('x-vercel-ip-city') || 'Unknown';

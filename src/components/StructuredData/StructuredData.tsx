@@ -3,22 +3,17 @@ import Script from 'next/script';
 export default function StructuredData() {
   const structuredData = {
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
+    '@type': 'WebApplication',
     name: 'Sri Lanka Loan Calculator',
-    description: 'Advanced loan calculator for Sri Lanka. Calculate Personal Loans, Home Loans, and Vehicle Leasing installments with Equated or Reducing Balance repayment types.',
-    operatingSystem: 'Web',
-    applicationCategory: 'FinanceApplication',
     url: 'https://srilanka-bank-loan-calculator.vercel.app',
+    description: 'Free loan and credit card installment calculator for Sri Lanka',
+    applicationCategory: 'FinanceApplication',
+    operatingSystem: 'Web',
     offers: {
       '@type': 'Offer',
-      price: '0',
-      priceCurrency: 'LKR',
-      availability: 'https://schema.org/InStock',
+      price: '0'
     },
-    author: {
-      '@type': 'Organization',
-      name: 'Sri Lanka Loan Calculator Team',
-    },
+    inLanguage: 'en'
   };
 
   return (
