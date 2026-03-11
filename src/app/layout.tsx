@@ -31,26 +31,12 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://srilanka-bank-loan-calculator.vercel.app"),
-  title: "Best Loan Calculator Sri Lanka | Personal, Home Loan & Vehicle Leasing",
-  description: "Advanced loan calculator for Sri Lanka. Calculate Personal Loans, Home Loans, and Vehicle Leasing installments with Equated or Reducing Balance repayment types. Hosted on Vercel.",
+  title: "Sri Lanka Loan Calculator | Personal, Home & Vehicle Loan Tools",
+  description: "Free loan calculator for Sri Lanka. Calculate EMI for personal loans, home loans, vehicle leasing. Supports equated and reducing balance. Credit card installment plans for all major Sri Lankan banks.",
   applicationName: "Sri Lanka Loan Calculator",
   authors: [{ name: "Sri Lanka Loan Calculator Team" }],
   generator: "Next.js",
-  keywords: [
-    "loan calculator",
-    "sri lanka",
-    "personal loan",
-    "home loan",
-    "vehicle leasing",
-    "repayment type",
-    "reducing balance",
-    "EMI calculator",
-    "vercel",
-    "bank loan calculator sri lanka",
-    "finance",
-    "interest rates",
-    "monthly installment"
-  ],
+  keywords: "sri lanka loan calculator, EMI calculator sri lanka, home loan calculator, vehicle leasing calculator, credit card installment sri lanka, commercial bank installment plan",
   referrer: "origin-when-cross-origin",
   creator: "Sri Lanka Loan Calculator Team",
   publisher: "Sri Lanka Loan Calculator Team",
@@ -81,16 +67,16 @@ export const metadata: Metadata = {
     telephone: false,
   },
   openGraph: {
-    title: "Loan Calculator Sri Lanka | Personal & Home Loan Tools",
-    description: "Calculate your monthly installments for Personal Loans, Home Loans, and Vehicle Leasing in Sri Lanka. Support for Equated and Reducing Balance repayment types.",
+    title: "Sri Lanka Loan Calculator | Personal, Home & Vehicle Loan Tools",
+    description: "Free loan calculator for Sri Lanka. Calculate EMI for personal loans, home loans, vehicle leasing. Supports equated and reducing balance. Credit card installment plans for all major Sri Lankan banks.",
     url: "https://srilanka-bank-loan-calculator.vercel.app",
-    siteName: "SL Loan Calculator",
+    siteName: "Sri Lanka Loan Calculator",
     images: [
       {
         url: "/icon.png",
         width: 192,
         height: 192,
-        alt: "Loan Calculator Sri Lanka",
+        alt: "Sri Lanka Loan Calculator",
       },
     ],
     locale: "en_LK",
@@ -98,8 +84,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Sri Lanka Loan & Leasing Calculator",
-    description: "Plan your finances with our advanced Loan Calculator. Supports all major Sri Lankan bank interest methods.",
+    title: "Sri Lanka Loan Calculator | Personal, Home & Vehicle Loan Tools",
+    description: "Free loan calculator for Sri Lanka. Calculate EMI for personal loans, home loans, vehicle leasing. Supports equated and reducing balance. Credit card installment plans for all major Sri Lankan banks.",
     images: ["/icon.png"],
   },
   alternates: {

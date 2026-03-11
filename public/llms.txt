@@ -1,0 +1,8 @@
+# Sri Lanka Loan Calculator
+
+> Free online loan calculator for Sri Lanka. Calculate personal loans, home loans, vehicle leasing with equated and reducing balance methods. Also includes credit card installment calculator for major Sri Lankan banks (Commercial Bank, Sampath, HNB, NTB AMEX, HSBC, People's Bank, NDB, Seylan, BOC) and a QR code generator.
+
+## Pages
+- [Loan Calculator](https://srilanka-bank-loan-calculator.vercel.app/)
+- [Credit Card Installment Calculator](https://srilanka-bank-loan-calculator.vercel.app/credit-card-installment)
+- [QR Code Generator](https://srilanka-bank-loan-calculator.vercel.app/generate-qr)

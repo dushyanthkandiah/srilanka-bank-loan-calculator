@@ -4,8 +4,8 @@ import CreditCardCalculator from "@/components/CreditCardCalculator";
 import styles from "../page.module.css";
 
 export const metadata: Metadata = {
-    title: "Credit Card Installment Calculator Sri Lanka",
-    description: "Calculate monthly installments for credit card purchases in Sri Lanka. Support for fixed monthly interest rates and processing fees.",
+    title: "Credit Card Installment Calculator Sri Lanka | All Banks",
+    description: "Calculate credit card installment plans for Commercial Bank, Sampath, HNB, NTB AMEX, HSBC, People's Bank, NDB, Seylan and BOC Sri Lanka.",
 };
 
 export default function CreditCardInstallmentPage() {
